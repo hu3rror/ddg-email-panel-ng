@@ -1,0 +1,12 @@
+{
+  "nav": {
+    "title": "DDG Email Panel",
+    "email": "Email",
+    "account": "Account"
+  },
+  "login": {
+    "title": "Enter your Duck Address",
+    "loginButton": "Login",
+    "tokenLogin": "Login using Access Token"
+  }
+}

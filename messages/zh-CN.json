@@ -1,0 +1,12 @@
+{
+  "nav": {
+    "title": "DDG 邮箱面板",
+    "email": "邮箱",
+    "account": "账户"
+  },
+  "login": {
+    "title": "请输入你的 Duck 邮箱地址",
+    "loginButton": "登录",
+    "tokenLogin": "使用 Access Token 登录"
+  }
+}

@@ -50,3 +50,25 @@ export function updateAccountAliasHelper(
   )
   store.set(accountsAtom, updatedAccounts)
 }
+
+export function setActiveAccountHelper(
+  store: ReturnType<typeof createStore>,
+  id: string
+): void {
+  store.set(activeAccountIdAtom, id)
+}
+
+export function removeAccountHelper(
+  store: ReturnType<typeof createStore>,
+  id: string
+): void {
+  const currentAccounts = store.get(accountsAtom)
+  const updatedAccounts = currentAccounts.filter((acc) => acc.id !== id)
+  store.set(accountsAtom, updatedAccounts)
+
+  const activeId = store.get(activeAccountIdAtom)
+  if (activeId === id) {
+    const nextActiveId = updatedAccounts[0]?.id || null
+    store.set(activeAccountIdAtom, nextActiveId)
+  }
+}

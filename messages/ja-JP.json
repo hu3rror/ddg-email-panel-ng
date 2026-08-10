@@ -1,0 +1,12 @@
+{
+  "nav": {
+    "title": "DDG メール面板",
+    "email": "メール",
+    "account": "アカウント"
+  },
+  "login": {
+    "title": "Duckアドレスを入力してください",
+    "loginButton": "ログイン",
+    "tokenLogin": "Access Token でログイン"
+  }
+}

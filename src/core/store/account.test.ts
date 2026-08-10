@@ -5,6 +5,8 @@ import {
   activeAccountIdAtom,
   addAccountHelper,
   updateAccountAliasHelper,
+  setActiveAccountHelper,
+  removeAccountHelper,
 } from './account'
 
 describe('AccountStore (Jotai v2 持久化 Store)', () => {
@@ -47,5 +49,49 @@ describe('AccountStore (Jotai v2 持久化 Store)', () => {
 
     const accounts = store.get(accountsAtom)
     expect(accounts[0].nextAlias).toBe('new_updated_alias')
+  })
+
+  it('应当能够按 UUID 准确切换当前激活的账户', () => {
+    const acc1 = addAccountHelper(store, {
+      username: 'user1',
+      email: '1@duck.com',
+      access_token: 'tok1',
+    })
+    const acc2 = addAccountHelper(store, {
+      username: 'user2',
+      email: '2@duck.com',
+      access_token: 'tok2',
+    })
+
+    expect(store.get(activeAccountIdAtom)).toBe(acc2.id)
+
+    setActiveAccountHelper(store, acc1.id)
+    expect(store.get(activeAccountIdAtom)).toBe(acc1.id)
+  })
+
+  it('应当能够按 UUID 精准删除目标账户，并在删除当前激活账户时自动退回备用账户或 null', () => {
+    const acc1 = addAccountHelper(store, {
+      username: 'user1',
+      email: '1@duck.com',
+      access_token: 'tok1',
+    })
+    const acc2 = addAccountHelper(store, {
+      username: 'user2',
+      email: '2@duck.com',
+      access_token: 'tok2',
+    })
+
+    // 删除当前激活的 acc2
+    removeAccountHelper(store, acc2.id)
+
+    const accounts = store.get(accountsAtom)
+    expect(accounts).toHaveLength(1)
+    expect(accounts[0].id).toBe(acc1.id)
+    expect(store.get(activeAccountIdAtom)).toBe(acc1.id)
+
+    // 删除最后一个账号
+    removeAccountHelper(store, acc1.id)
+    expect(store.get(accountsAtom)).toHaveLength(0)
+    expect(store.get(activeAccountIdAtom)).toBeNull()
   })
 })
