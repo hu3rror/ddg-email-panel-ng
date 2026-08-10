@@ -46,3 +46,26 @@ describe('verifyOtpSchema (OTP 清洗与校验)', () => {
     expect(result.success).toBe(false)
   })
 })
+
+import { accessTokenLoginSchema } from './auth'
+
+describe('accessTokenLoginSchema (Token 直连登录校验)', () => {
+  it('在用户名和 Access Token 均为合法非空值时通过校验', () => {
+    const result = accessTokenLoginSchema.safeParse({
+      username: 'duckuser',
+      token: '  valid_api_token_123  ',
+    })
+    expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.data.token).toBe('valid_api_token_123')
+    }
+  })
+
+  it('在 Token 为空或全为空格时校验失败', () => {
+    const result = accessTokenLoginSchema.safeParse({
+      username: 'duckuser',
+      token: '   ',
+    })
+    expect(result.success).toBe(false)
+  })
+})
