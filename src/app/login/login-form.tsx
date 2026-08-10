@@ -43,6 +43,16 @@ export function LoginForm() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
+
+        // 处理 DDG reCAPTCHA 挑战 — 引导用户使用 Access Token 登录
+        if (data.error === 'rc') {
+          setErrorMsg(
+            'DuckDuckGo requires a security check to send OTP emails. ' +
+              'Please try again later, or use the Access Token login below.'
+          )
+          return
+        }
+
         throw new Error(data.message || 'Failed to send OTP')
       }
 

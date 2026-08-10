@@ -43,10 +43,9 @@ describe('POST /api/auth/login (OTP 两阶段认证 Edge Route)', () => {
     expect(data.access_token).toBe('final_access_token_999')
     expect(data.username).toBe('duckuser')
 
-    // 验证 OTP 被转换为 + 号发往 DDG 上游
     expect(mockFetch).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining('otp=pass%2B123'),
+      expect.stringContaining('otp=pass+123'),
       expect.anything()
     )
   })
