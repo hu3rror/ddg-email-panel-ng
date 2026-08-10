@@ -26,31 +26,31 @@ export function AccountManager() {
 
   if (accounts.length === 0) {
     return (
-      <div className="text-center p-8 text-slate-500">
+      <div className="text-center p-8 text-[var(--text-secondary)]">
         No logged-in accounts. Redirecting...
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-4 max-w-lg w-full mx-auto p-6 border rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
-      <h2 className="text-xl font-bold tracking-tight mb-2">Account Management</h2>
+    <div className="flex flex-col gap-4 max-w-lg w-full mx-auto p-6 border border-[var(--border-default)] rounded-card bg-[var(--bg-surface)] shadow-sm">
+      <h2 className="text-xl font-bold tracking-tight text-[var(--text-primary)] mb-2">Account Management</h2>
 
       <div className="flex flex-col gap-3">
         {accounts.map((acc) => (
           <div
             key={acc.id}
-            className="flex items-center justify-between p-3 border rounded-lg border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50"
+            className="flex items-center justify-between p-3 border border-[var(--border-default)] rounded-card bg-[var(--bg-subtle)]"
           >
             <div className="flex flex-col">
-              <span className="text-sm font-medium">{acc.email || `${acc.username}@duck.com`}</span>
-              <span className="text-xs text-slate-400">ID: {acc.id.slice(0, 8)}...</span>
+              <span className="text-sm font-medium text-[var(--text-primary)]">{acc.email || `${acc.username}@duck.com`}</span>
+              <span className="text-xs text-[var(--text-muted)]">ID: {acc.id.slice(0, 8)}...</span>
             </div>
 
             <button
               type="button"
               onClick={() => handleRemoveAccount(acc.id)}
-              className="px-3 py-1 text-xs font-medium bg-red-600 hover:bg-red-500 text-white rounded-md transition-colors"
+              className="px-3 py-1 text-xs font-medium rounded-btn border border-[var(--border-default)] bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
             >
               Log Out
             </button>

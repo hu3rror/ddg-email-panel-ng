@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { activeAccountAtom, accountsAtom } from '@/core/store/account'
 import { CopyButton } from '@/components/copy-button'
+import { ShieldCheck } from 'lucide-react'
 
 export function EmailDashboard() {
   const activeAccount = useAtomValue(activeAccountAtom)
@@ -14,7 +15,7 @@ export function EmailDashboard() {
 
   if (!activeAccount) {
     return (
-      <div className="text-center p-8 text-slate-500">
+      <div className="text-center p-8 text-[var(--text-secondary)]">
         No active account found. Please log in first.
       </div>
     )
@@ -58,44 +59,47 @@ export function EmailDashboard() {
     : ''
 
   return (
-    <div className="flex flex-col gap-6 max-w-md w-full mx-auto p-6 border rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+    <div className="flex flex-col gap-6 max-w-md w-full mx-auto p-6 border border-[var(--border-default)] rounded-card bg-[var(--bg-surface)] shadow-sm">
       {/* 主 Duck 地址 */}
-      <div className="flex flex-col gap-1">
-        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+      <div className="flex flex-col gap-2">
+        <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
           Main Duck Address
         </span>
-        <div className="flex items-center justify-between gap-4">
-          <span className="text-base font-medium">{mainDuckAddress}</span>
+        <div className="flex items-center justify-between gap-4 p-3 rounded-card bg-[var(--bg-subtle)]">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--duck-pill-bg)] text-[var(--duck-pill-text)] text-base font-medium">
+            {mainDuckAddress}
+          </span>
           <CopyButton text={mainDuckAddress} />
         </div>
       </div>
 
-      <hr className="border-slate-100 dark:border-slate-800" />
+      <hr className="border-[var(--border-default)]" />
 
       {/* 私密 Duck 地址 */}
-      <div className="flex flex-col gap-1">
-        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+      <div className="flex flex-col gap-2">
+        <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
           Private Duck Address
         </span>
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4 p-3 rounded-card bg-[var(--bg-subtle)]">
           {privateDuckAddress ? (
-            <span className="text-base font-medium text-sky-600 dark:text-sky-400">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--duck-pill-bg)] text-[var(--duck-pill-text)] text-base font-medium">
+              <ShieldCheck size={16} className="text-ddg-green dark:text-ddg-green-dark" />
               {privateDuckAddress}
             </span>
           ) : (
-            <span className="text-sm italic text-slate-400">No alias generated yet</span>
+            <span className="text-sm italic text-[var(--text-muted)]">No alias generated yet</span>
           )}
           <CopyButton text={privateDuckAddress} disabled={!privateDuckAddress} />
         </div>
       </div>
 
-      {errorMsg && <p className="text-xs text-red-500">{errorMsg}</p>}
+      {errorMsg && <p className="text-xs text-[var(--brand-orange)]">{errorMsg}</p>}
 
       <button
         type="button"
         onClick={handleGenerateAlias}
         disabled={loading}
-        className="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-medium rounded-lg text-sm disabled:opacity-50 transition-colors mt-2"
+        className="w-full py-2.5 bg-ddg-orange hover:bg-ddg-orange-hover text-white font-semibold rounded-btn text-sm disabled:opacity-50 transition-colors mt-2"
       >
         {loading ? 'Generating...' : 'Generate Private Duck Address'}
       </button>

@@ -26,7 +26,7 @@ export function CopyButton({ text, disabled = false }: CopyButtonProps) {
       type="button"
       onClick={handleCopy}
       disabled={disabled || !text}
-      className="px-3 py-1 text-xs font-medium bg-sky-600 hover:bg-sky-500 text-white rounded-md disabled:opacity-50 transition-colors"
+      className="px-3 py-1 text-xs font-medium rounded-btn border border-[var(--border-default)] bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-50 transition-colors"
     >
       {copied ? 'Copied!' : 'Copy'}
     </button>

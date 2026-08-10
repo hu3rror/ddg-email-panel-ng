@@ -1,7 +1,63 @@
 @import "tailwindcss";
 
+@theme {
+  --color-ddg-orange: #DE5833;
+  --color-ddg-orange-hover: #C84623;
+  --color-ddg-orange-dark-hover: #F06945;
+  --color-ddg-green: #5B9E4D;
+  --color-ddg-green-dark: #61B352;
+  --color-ddg-yellow: #FDD20A;
+  --color-ddg-blue: #3969EF;
+  --color-ddg-blue-dark: #4D7CFF;
+
+  --radius-card: 12px;
+  --radius-btn: 8px;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --shadow-sm: var(--ddg-shadow-sm);
+  --shadow-md: var(--ddg-shadow-md);
+}
+
+/* ── Light theme (default) ── */
+:root {
+  --bg-base: #F8F9FA;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F0F2F5;
+  --text-primary: #222222;
+  --text-secondary: #666666;
+  --text-muted: #8C8C8C;
+  --border-default: #E0E0E0;
+  --border-active: #DE5833;
+  --duck-pill-bg: #FFEBE6;
+  --duck-pill-text: #C84623;
+  --shield-bg: #EAF5E9;
+  --ddg-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --ddg-shadow-md: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Dark theme ── */
+.dark {
+  --bg-base: #1C1C1C;
+  --bg-surface: #282828;
+  --bg-subtle: #333333;
+  --text-primary: #F1F1F1;
+  --text-secondary: #A0A0A0;
+  --text-muted: #6E6E6E;
+  --border-default: #3A3A3A;
+  --border-active: #E37151;
+  --duck-pill-bg: #3D221B;
+  --duck-pill-text: #FF7A59;
+  --shield-bg: #1B301D;
+  --ddg-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --ddg-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 antialiased;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
