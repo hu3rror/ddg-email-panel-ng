@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/navigation'
 import { useAtom } from 'jotai'
 import { accountsAtom, activeAccountIdAtom } from '@/core/store/account'
@@ -24,16 +24,10 @@ export function AccountManager() {
     }
   }
 
-  useEffect(() => {
-    if (accounts.length === 0) {
-      router.push('/login')
-    }
-  }, [accounts.length, router])
-
   if (accounts.length === 0) {
     return (
       <div className="text-center p-8 text-[var(--text-secondary)]">
-        No logged-in accounts. Redirecting...
+        No logged-in accounts found.
       </div>
     )
   }

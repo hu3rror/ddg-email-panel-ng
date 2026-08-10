@@ -15,6 +15,7 @@ describe('EmailDashboard Component', () => {
   }
 
   beforeEach(() => {
+    localStorage.clear()
     store = createStore()
     store.set(accountsAtom, [mockAccount])
     store.set(activeAccountIdAtom, mockAccount.id)
@@ -29,6 +30,21 @@ describe('EmailDashboard Component', () => {
 
     expect(screen.getByText('testduck@duck.com')).toBeInTheDocument()
     expect(screen.getByText('initial_alias@duck.com')).toBeInTheDocument()
+  })
+
+  it('无账号时显示空状态消息，不会自动重定向（防止 F5 刷新误跳）', () => {
+    const emptyStore = createStore()
+    emptyStore.set(accountsAtom, [])
+
+    render(
+      <Provider store={emptyStore}>
+        <EmailDashboard />
+      </Provider>
+    )
+
+    expect(screen.getByText(/No active account found/i)).toBeInTheDocument()
+    // 不应出现 Login 按钮（意味着没有 redirect 到 /login 页面）
+    expect(screen.queryByRole('button', { name: /^Login$/i })).not.toBeInTheDocument()
   })
 
   it('点击“Generate Private Duck Address”按钮时，应当调用 API 并在 UI 上同步更新新别名', async () => {
