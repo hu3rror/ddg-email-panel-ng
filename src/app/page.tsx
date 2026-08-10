@@ -6,7 +6,7 @@ export default function HomePage() {
 
   return (
     <main className="flex-1 flex flex-col items-center justify-center p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm flex flex-col gap-6 text-center">
+      <div className="z-10 max-w-5xl w-full items-center justify-between text-sm flex flex-col gap-6 text-center">
         <h1 className="text-4xl font-bold tracking-tight text-[var(--text-primary)]">DDG Email Panel</h1>
         <p className="text-[var(--text-secondary)] max-w-md">
           Open source unofficial DuckDuckGo Email Protection panel, deployed natively on Vercel.

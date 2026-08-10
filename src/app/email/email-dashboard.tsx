@@ -79,7 +79,7 @@ export function EmailDashboard() {
     <div className="flex flex-col gap-6 max-w-md w-full mx-auto p-6 border border-[var(--border-default)] rounded-card bg-[var(--bg-surface)] shadow-sm">
       {/* 主 Duck 地址 */}
       <div className="flex flex-col gap-2">
-        <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+        <span className="text-xs font-semibold text-[var(--text-secondary)]">
           Main Duck Address
         </span>
         <div className="flex items-center justify-between gap-4 p-3 rounded-card bg-[var(--bg-subtle)]">
@@ -94,7 +94,7 @@ export function EmailDashboard() {
 
       {/* 私密 Duck 地址 */}
       <div className="flex flex-col gap-2">
-        <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+        <span className="text-xs font-semibold text-[var(--text-secondary)]">
           Private Duck Address
         </span>
         <div className="flex items-center justify-between gap-4 p-3 rounded-card bg-[var(--bg-subtle)]">
