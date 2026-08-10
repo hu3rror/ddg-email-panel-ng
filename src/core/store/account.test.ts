@@ -7,7 +7,63 @@ import {
   updateAccountAliasHelper,
   setActiveAccountHelper,
   removeAccountHelper,
+  addAccount,
+  removeAccount,
+  updateAlias,
+  isDuplicate,
 } from './account'
+
+describe('AccountStore pure functions (深层纯函数)', () => {
+  it('addAccount 追加账户并生成 UUID，且不修改原数组', () => {
+    const existing: any[] = []
+    const { accounts, account } = addAccount(existing, {
+      username: 'testuser',
+      email: 'user@example.com',
+      access_token: 'token_123',
+    })
+
+    expect(existing).toHaveLength(0) // 原数组未被修改
+    expect(accounts).toHaveLength(1)
+    expect(accounts[0].username).toBe('testuser')
+    expect(account.id).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    )
+    expect(accounts[0].id).toBe(account.id)
+  })
+
+  it('removeAccount 按 id 移除且不修改原数组', () => {
+    const a1 = { id: 'id-1', username: 'u1', email: 'a@b.com', access_token: 't1' }
+    const a2 = { id: 'id-2', username: 'u2', email: 'c@d.com', access_token: 't2' }
+    const input = [a1, a2]
+
+    const result = removeAccount(input, 'id-1')
+
+    expect(input).toHaveLength(2) // 原数组不变
+    expect(result).toHaveLength(1)
+    expect(result[0].id).toBe('id-2')
+  })
+
+  it('updateAlias 更新指定账户的 nextAlias 且不修改原数组', () => {
+    const a1 = { id: 'id-1', username: 'u1', email: 'a@b.com', access_token: 't1', nextAlias: 'old' }
+    const input = [a1]
+
+    const result = updateAlias(input, 'id-1', 'new-alias')
+
+    expect(input[0].nextAlias).toBe('old') // 原数组不变
+    expect(result[0].nextAlias).toBe('new-alias')
+  })
+
+  it('isDuplicate 大小写不敏感检测用户名', () => {
+    const accounts = [
+      { id: '1', username: 'Alice', email: 'a@b.com', access_token: 't1' },
+    ]
+
+    expect(isDuplicate(accounts, 'alice')).toBe(true)
+    expect(isDuplicate(accounts, 'ALICE')).toBe(true)
+    expect(isDuplicate(accounts, 'Alice')).toBe(true)
+    expect(isDuplicate(accounts, 'bob')).toBe(false)
+  })
+})
 
 describe('AccountStore (Jotai v2 持久化 Store)', () => {
   let store: ReturnType<typeof createStore>

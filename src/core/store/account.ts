@@ -23,20 +23,64 @@ export const activeAccountAtom = atom((get) => {
   return accounts.find((a) => a.id === activeId) || accounts[0] || null
 })
 
+// ── 深层纯函数（不碰 store，hook 和测试共用） ──
+
+/**
+ * 追加一个账户并生成 UUID。不修改原数组。
+ */
+export function addAccount(
+  accounts: Account[],
+  data: Omit<Account, 'id'>
+): { accounts: Account[]; account: Account } {
+  const account: Account = {
+    ...data,
+    id: crypto.randomUUID(),
+  }
+  return { accounts: [...accounts, account], account }
+}
+
+/**
+ * 按 id 移除账户。不修改原数组。
+ */
+export function removeAccount(accounts: Account[], id: string): Account[] {
+  return accounts.filter((a) => a.id !== id)
+}
+
+/**
+ * 更新指定账户的 nextAlias。不修改原数组。
+ */
+export function updateAlias(
+  accounts: Account[],
+  id: string,
+  newAlias: string
+): Account[] {
+  return accounts.map((acc) =>
+    acc.id === id ? { ...acc, nextAlias: newAlias } : acc
+  )
+}
+
+/**
+ * 大小写不敏感去重检查。
+ */
+export function isDuplicate(
+  accounts: Account[],
+  username: string
+): boolean {
+  return accounts.some(
+    (a) => a.username.toLowerCase() === username.toLowerCase()
+  )
+}
+
+// ── 原有 Helper 包装器（委托给纯函数，向后兼容） ──
+
 export function addAccountHelper(
   store: ReturnType<typeof createStore>,
   accountData: Omit<Account, 'id'>
 ): Account {
-  const newAccount: Account = {
-    ...accountData,
-    id: crypto.randomUUID(),
-  }
-
-  const currentAccounts = store.get(accountsAtom)
-  store.set(accountsAtom, [...currentAccounts, newAccount])
-  store.set(activeAccountIdAtom, newAccount.id)
-
-  return newAccount
+  const { accounts, account } = addAccount(store.get(accountsAtom), accountData)
+  store.set(accountsAtom, accounts)
+  store.set(activeAccountIdAtom, account.id)
+  return account
 }
 
 export function updateAccountAliasHelper(
@@ -44,11 +88,7 @@ export function updateAccountAliasHelper(
   id: string,
   newAlias: string
 ): void {
-  const currentAccounts = store.get(accountsAtom)
-  const updatedAccounts = currentAccounts.map((acc) =>
-    acc.id === id ? { ...acc, nextAlias: newAlias } : acc
-  )
-  store.set(accountsAtom, updatedAccounts)
+  store.set(accountsAtom, updateAlias(store.get(accountsAtom), id, newAlias))
 }
 
 export function setActiveAccountHelper(
@@ -63,12 +103,11 @@ export function removeAccountHelper(
   id: string
 ): void {
   const currentAccounts = store.get(accountsAtom)
-  const updatedAccounts = currentAccounts.filter((acc) => acc.id !== id)
-  store.set(accountsAtom, updatedAccounts)
+  const updated = removeAccount(currentAccounts, id)
+  store.set(accountsAtom, updated)
 
   const activeId = store.get(activeAccountIdAtom)
   if (activeId === id) {
-    const nextActiveId = updatedAccounts[0]?.id || null
-    store.set(activeAccountIdAtom, nextActiveId)
+    store.set(activeAccountIdAtom, updated[0]?.id || null)
   }
 }
