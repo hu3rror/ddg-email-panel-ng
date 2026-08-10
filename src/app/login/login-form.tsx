@@ -64,6 +64,12 @@ export function LoginForm({ next = '/email' }: { next?: string }) {
       return
     }
 
+    // 去重检查: 在发送 OTP 之前检查，避免浪费一次性密码
+    if (handleDuplicate(username)) {
+      setLoading(false)
+      return
+    }
+
     setLoading(true)
     try {
       const res = await fetch('/api/auth/loginlink', {
@@ -216,7 +222,7 @@ export function LoginForm({ next = '/email' }: { next?: string }) {
             onChange={(e) => setOtp(e.target.value)}
             className="w-full px-3 py-2 border rounded-btn border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] text-sm placeholder:text-[var(--text-muted)]"
           />
-          {errorMsg && <p className="text-xs text-[var(--brand-orange)]">{errorMsg}</p>}
+          {errorMsg && <p className="text-xs text-ddg-orange">{errorMsg}</p>}
         </div>
 
         <button
@@ -273,7 +279,7 @@ export function LoginForm({ next = '/email' }: { next?: string }) {
             className="w-full px-3 py-2 border rounded-btn border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] text-sm placeholder:text-[var(--text-muted)]"
           />
 
-          {errorMsg && <p className="text-xs text-[var(--brand-orange)]">{errorMsg}</p>}
+          {errorMsg && <p className="text-xs text-ddg-orange">{errorMsg}</p>}
         </div>
 
         <button
@@ -319,7 +325,7 @@ export function LoginForm({ next = '/email' }: { next?: string }) {
             @duck.com
           </span>
         </div>
-        {errorMsg && <p className="text-xs text-[var(--brand-orange)]">{errorMsg}</p>}
+        {errorMsg && <p className="text-xs text-ddg-orange">{errorMsg}</p>}
       </div>
 
       <button

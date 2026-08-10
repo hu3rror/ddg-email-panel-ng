@@ -4,14 +4,31 @@ import React, { useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { activeAccountAtom, accountsAtom } from '@/core/store/account'
 import { CopyButton } from '@/components/copy-button'
+import { useHydrated } from '@/core/hooks/use-hydrated'
 import { ShieldCheck } from 'lucide-react'
 
 export function EmailDashboard() {
+  const hydrated = useHydrated()
   const activeAccount = useAtomValue(activeAccountAtom)
   const setAccounts = useSetAtom(accountsAtom)
 
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+
+  if (!hydrated) {
+    return (
+      <div
+        data-testid="dashboard-skeleton"
+        className="flex flex-col gap-6 max-w-md w-full mx-auto p-6 animate-pulse"
+      >
+        <div className="h-4 bg-[var(--bg-subtle)] rounded w-1/3" />
+        <div className="h-12 bg-[var(--bg-subtle)] rounded-card" />
+        <div className="h-4 bg-[var(--bg-subtle)] rounded w-1/3" />
+        <div className="h-12 bg-[var(--bg-subtle)] rounded-card" />
+        <div className="h-10 bg-[var(--bg-subtle)] rounded-btn mt-2" />
+      </div>
+    )
+  }
 
   if (!activeAccount) {
     return (
@@ -93,7 +110,7 @@ export function EmailDashboard() {
         </div>
       </div>
 
-      {errorMsg && <p className="text-xs text-[var(--brand-orange)]">{errorMsg}</p>}
+      {errorMsg && <p className="text-xs text-ddg-orange">{errorMsg}</p>}
 
       <button
         type="button"

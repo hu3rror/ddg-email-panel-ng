@@ -4,9 +4,11 @@ import React from 'react'
 import { useRouter } from 'next/navigation'
 import { useAtom } from 'jotai'
 import { accountsAtom, activeAccountIdAtom } from '@/core/store/account'
+import { useHydrated } from '@/core/hooks/use-hydrated'
 
 export function AccountManager() {
   const router = useRouter()
+  const hydrated = useHydrated()
   const [accounts, setAccounts] = useAtom(accountsAtom)
   const [activeAccountId, setActiveAccountId] = useAtom(activeAccountIdAtom)
 
@@ -22,6 +24,20 @@ export function AccountManager() {
     if (updatedAccounts.length === 0) {
       router.push('/login')
     }
+  }
+
+  if (!hydrated) {
+    return (
+      <div
+        data-testid="account-skeleton"
+        className="flex flex-col gap-4 max-w-lg w-full mx-auto p-6 animate-pulse"
+      >
+        <div className="h-6 bg-[var(--bg-subtle)] rounded w-1/2 mb-2" />
+        <div className="h-16 bg-[var(--bg-subtle)] rounded-card" />
+        <div className="h-16 bg-[var(--bg-subtle)] rounded-card" />
+        <div className="h-10 bg-[var(--bg-subtle)] rounded-btn mt-2 border-2 border-dashed border-[var(--border-default)]" />
+      </div>
+    )
   }
 
   if (accounts.length === 0) {

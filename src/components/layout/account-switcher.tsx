@@ -5,11 +5,23 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAtom, useAtomValue } from 'jotai'
 import { accountsAtom, activeAccountIdAtom } from '@/core/store/account'
+import { useHydrated } from '@/core/hooks/use-hydrated'
 
 export function AccountSwitcher() {
   const router = useRouter()
+  const hydrated = useHydrated()
   const accounts = useAtomValue(accountsAtom)
   const [activeAccountId, setActiveAccountId] = useAtom(activeAccountIdAtom)
+
+  if (!hydrated) {
+    return (
+      <div
+        data-testid="switcher-skeleton"
+        className="px-3 py-1.5 w-[120px] h-9 rounded-btn bg-[var(--bg-subtle)] animate-pulse"
+        aria-label="Loading accounts"
+      />
+    )
+  }
 
   if (accounts.length === 0) {
     return (

@@ -13,12 +13,18 @@ export function ThemeToggle() {
   const toggle = () => {
     const next = !dark
     setDark(next)
+    // Add transition class before toggling for smooth theme switch
+    document.documentElement.classList.add('theme-transitioning')
     document.documentElement.classList.toggle('dark', next)
     try {
       localStorage.setItem('ddg-theme', next ? 'dark' : 'light')
     } catch (e) {
       /* ignore */
     }
+    // Remove transition class after the animation completes
+    setTimeout(() => {
+      document.documentElement.classList.remove('theme-transitioning')
+    }, 300)
   }
 
   return (
