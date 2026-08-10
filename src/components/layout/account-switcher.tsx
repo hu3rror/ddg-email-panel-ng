@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { useAtom, useAtomValue } from 'jotai'
 import { accountsAtom, activeAccountIdAtom } from '@/core/store/account'
 
@@ -9,7 +10,14 @@ export function AccountSwitcher() {
   const [activeAccountId, setActiveAccountId] = useAtom(activeAccountIdAtom)
 
   if (accounts.length === 0) {
-    return null
+    return (
+      <Link
+        href="/login"
+        className="px-4 py-1.5 text-sm font-semibold rounded-btn bg-ddg-orange hover:bg-ddg-orange-hover text-white transition-colors"
+      >
+        Login
+      </Link>
+    )
   }
 
   return (

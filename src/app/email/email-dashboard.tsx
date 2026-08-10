@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { activeAccountAtom, accountsAtom } from '@/core/store/account'
 import { CopyButton } from '@/components/copy-button'
@@ -13,10 +14,18 @@ export function EmailDashboard() {
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
 
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!activeAccount) {
+      router.push('/login')
+    }
+  }, [activeAccount, router])
+
   if (!activeAccount) {
     return (
       <div className="text-center p-8 text-[var(--text-secondary)]">
-        No active account found. Please log in first.
+        No active account found. Redirecting to login...
       </div>
     )
   }

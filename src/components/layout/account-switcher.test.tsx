@@ -5,6 +5,19 @@ import { AccountSwitcher } from './account-switcher'
 import { addAccountHelper, activeAccountIdAtom } from '@/core/store/account'
 
 describe('AccountSwitcher Component', () => {
+  it('无账号时应渲染登录按钮而非下拉框', () => {
+    const store = createStore()
+
+    render(
+      <Provider store={store}>
+        <AccountSwitcher />
+      </Provider>
+    )
+
+    expect(screen.getByRole('link', { name: /Login/i })).toHaveAttribute('href', '/login')
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+  })
+
   it('应当能够渲染多个账号下拉选项并支持按 UUID 切换当前激活账号', () => {
     const store = createStore()
     const acc1 = addAccountHelper(store, {

@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAtom } from 'jotai'
 import { accountsAtom, activeAccountIdAtom } from '@/core/store/account'
@@ -23,6 +23,12 @@ export function AccountManager() {
       router.push('/login')
     }
   }
+
+  useEffect(() => {
+    if (accounts.length === 0) {
+      router.push('/login')
+    }
+  }, [accounts.length, router])
 
   if (accounts.length === 0) {
     return (
