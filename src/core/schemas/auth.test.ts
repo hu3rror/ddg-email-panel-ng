@@ -23,3 +23,26 @@ describe('requestOtpSchema (Zod 校验)', () => {
     }
   })
 })
+
+import { verifyOtpSchema } from './auth'
+
+describe('verifyOtpSchema (OTP 清洗与校验)', () => {
+  it('应当自动将带有空格/换行的 OTP 清洗并替换为 + 号', () => {
+    const result = verifyOtpSchema.safeParse({
+      username: 'duckuser',
+      otp: ' abc 123 xyz ',
+    })
+    expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.data.otp).toBe('abc+123+xyz')
+    }
+  })
+
+  it('在 OTP 为空时校验失败', () => {
+    const result = verifyOtpSchema.safeParse({
+      username: 'duckuser',
+      otp: '   ',
+    })
+    expect(result.success).toBe(false)
+  })
+})
