@@ -23,9 +23,6 @@ export const activeAccountAtom = atom((get) => {
   return accounts.find((a) => a.id === activeId) || accounts[0] || null
 })
 
-/**
- * 辅助方法：向 Store 中添加账号，自动分配唯一 UUID
- */
 export function addAccountHelper(
   store: ReturnType<typeof createStore>,
   accountData: Omit<Account, 'id'>
@@ -40,4 +37,16 @@ export function addAccountHelper(
   store.set(activeAccountIdAtom, newAccount.id)
 
   return newAccount
+}
+
+export function updateAccountAliasHelper(
+  store: ReturnType<typeof createStore>,
+  id: string,
+  newAlias: string
+): void {
+  const currentAccounts = store.get(accountsAtom)
+  const updatedAccounts = currentAccounts.map((acc) =>
+    acc.id === id ? { ...acc, nextAlias: newAlias } : acc
+  )
+  store.set(accountsAtom, updatedAccounts)
 }

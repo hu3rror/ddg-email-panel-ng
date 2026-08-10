@@ -27,3 +27,15 @@ export async function getDashboardInfo(token: string): Promise<Response> {
     },
   })
 }
+
+export async function generateAddresses(token: string): Promise<Response> {
+  const url = `${DUCKDUCKGO_API_ENDPOINT}/email/addresses`
+  return fetch(url, {
+    ...fetchInit,
+    method: 'POST',
+    headers: {
+      ...fetchInit.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
