@@ -2,6 +2,8 @@
 
 开源的 DuckDuckGo Email Protection 非官方面板，原生部署在 Vercel 上。
 
+灵感源自 [whatk233/ddg-email-panel](https://github.com/whatk233/ddg-email-panel) 分支，用 Next.js 15 App Router 重构。
+
 ## 功能
 
 - **多账户管理。** 用多个 Duck 邮箱地址登录，自由切换，集中管理。

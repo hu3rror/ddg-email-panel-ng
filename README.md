@@ -2,6 +2,8 @@
 
 Open source, unofficial panel for DuckDuckGo Email Protection. Deployed on Vercel.
 
+Idea from [whatk233/ddg-email-panel](https://github.com/whatk233/ddg-email-panel), rebuilt from scratch with Next.js 15 App Router.
+
 [中文](./README_zh-CN.md)
 
 ## Features
