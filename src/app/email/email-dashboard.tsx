@@ -1,11 +1,88 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { activeAccountAtom, accountsAtom } from '@/core/store/account'
+import {
+  activeAccountAtom,
+  accountsAtom,
+  addAliasHistoryEntry,
+  backfillAliasHistory,
+  ALIAS_HISTORY_LIMIT,
+} from '@/core/store/account'
 import { CopyButton } from '@/components/copy-button'
 import { useHydrated } from '@/core/hooks/use-hydrated'
-import { ShieldCheck } from 'lucide-react'
+import { ShieldCheck, ChevronDown, ChevronRight } from 'lucide-react'
+
+function formatRelativeTime(isoString: string): string {
+  const now = Date.now()
+  const then = new Date(isoString).getTime()
+  const diffMs = now - then
+  const diffSec = Math.floor(diffMs / 1000)
+
+  if (diffSec < 60) return 'Just now'
+  const diffMin = Math.floor(diffSec / 60)
+  if (diffMin < 60) return `${diffMin}m ago`
+  const diffHour = Math.floor(diffMin / 60)
+  if (diffHour < 24) return `${diffHour}h ago`
+  const diffDay = Math.floor(diffHour / 24)
+  if (diffDay < 7) return `${diffDay}d ago`
+  // 超过 7 天显示日期
+  return new Date(isoString).toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+  })
+}
+
+function AliasHistoryPanel({
+  history,
+  open,
+  onToggle,
+}: {
+  history: { address: string; generatedAt: string }[] | undefined
+  open: boolean
+  onToggle: () => void
+}) {
+  if (!history || history.length === 0) return null
+
+  return (
+    <div className="flex flex-col gap-2 border-t border-[var(--border-default)] pt-4">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="flex items-center gap-2 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+      >
+        {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+        Recent Private Duck Addresses ({history.length}/{ALIAS_HISTORY_LIMIT})
+      </button>
+
+      <div
+        className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+        style={{ gridTemplateRows: open ? '1fr' : '0fr' }}
+      >
+        <div className="overflow-hidden">
+          <div className="flex flex-col gap-1.5 pt-1">
+            {history.map((entry, idx) => (
+              <div
+                key={`${entry.address}-${idx}`}
+                className="flex items-center justify-between gap-2 p-2 rounded-card bg-[var(--bg-subtle)]"
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-xs text-[var(--text-muted)] shrink-0 min-w-[4.5rem] text-right whitespace-nowrap">
+                    {formatRelativeTime(entry.generatedAt)}
+                  </span>
+                  <span className="text-sm font-medium text-[var(--text-primary)] truncate">
+                    {entry.address}@duck.com
+                  </span>
+                </div>
+                <CopyButton text={`${entry.address}@duck.com`} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export function EmailDashboard() {
   const hydrated = useHydrated()
@@ -14,6 +91,16 @@ export function EmailDashboard() {
 
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [historyOpen, setHistoryOpen] = useState(false)
+  const backfilled = useRef(false)
+
+  // 迁移：已有 nextAlias 但无 aliasHistory 的账户自动回填
+  useEffect(() => {
+    if (hydrated && !backfilled.current) {
+      backfilled.current = true
+      setAccounts(backfillAliasHistory)
+    }
+  }, [hydrated, setAccounts])
 
   if (!hydrated) {
     return (
@@ -59,9 +146,10 @@ export function EmailDashboard() {
       const newAlias = data.address
 
       setAccounts((prev) =>
-        prev.map((acc) =>
-          acc.id === activeAccount.id ? { ...acc, nextAlias: newAlias } : acc
-        )
+        addAliasHistoryEntry(prev, activeAccount.id, {
+          address: newAlias,
+          generatedAt: new Date().toISOString(),
+        })
       )
     } catch (err: any) {
       setErrorMsg(err.message || 'Error generating private address')
@@ -74,6 +162,7 @@ export function EmailDashboard() {
   const privateDuckAddress = activeAccount.nextAlias
     ? `${activeAccount.nextAlias}@duck.com`
     : ''
+  const historyCount = activeAccount.aliasHistory?.length ?? 0
 
   return (
     <div className="flex flex-col gap-6 max-w-md w-full mx-auto p-6 border border-[var(--border-default)] rounded-card bg-[var(--bg-surface)] shadow-sm">
@@ -120,6 +209,13 @@ export function EmailDashboard() {
       >
         {loading ? 'Generating...' : 'Generate Private Duck Address'}
       </button>
+
+      {/* 别名历史折叠面板 */}
+      <AliasHistoryPanel
+        history={activeAccount.aliasHistory}
+        open={historyOpen}
+        onToggle={() => setHistoryOpen((v) => !v)}
+      />
     </div>
   )
 }

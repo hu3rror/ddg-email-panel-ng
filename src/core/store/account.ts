@@ -1,6 +1,13 @@
 import { atom, createStore } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
+export const ALIAS_HISTORY_LIMIT = 10
+
+export interface AliasHistoryEntry {
+  address: string
+  generatedAt: string // ISO timestamp
+}
+
 export interface Account {
   id: string // UUID
   username: string
@@ -9,6 +16,7 @@ export interface Account {
   cohort?: string
   nextAlias?: string
   remark?: string
+  aliasHistory?: AliasHistoryEntry[]
 }
 
 export const accountsAtom = atomWithStorage<Account[]>('ddg_accounts', [])
@@ -69,6 +77,48 @@ export function isDuplicate(
   return accounts.some(
     (a) => a.username.toLowerCase() === username.toLowerCase()
   )
+}
+
+/**
+ * 向指定账户的 aliasHistory 追加一条记录。
+ * 新记录插入到最前（最新在最前），超出限制时截断末尾。
+ * 不修改原数组。
+ */
+export function addAliasHistoryEntry(
+  accounts: Account[],
+  accountId: string,
+  entry: AliasHistoryEntry
+): Account[] {
+  return accounts.map((acc) => {
+    if (acc.id !== accountId) return acc
+    const history = acc.aliasHistory || []
+    return {
+      ...acc,
+      nextAlias: entry.address,
+      aliasHistory: [entry, ...history].slice(0, ALIAS_HISTORY_LIMIT),
+    }
+  })
+}
+
+/**
+ * 迁移已有账户：如果 nextAlias 存在但 aliasHistory 为空，
+ * 自动回填一条历史记录（使用当前时间）。
+ * 不修改原数组。
+ */
+export function backfillAliasHistory(
+  accounts: Account[]
+): Account[] {
+  return accounts.map((acc) => {
+    if (acc.nextAlias && (!acc.aliasHistory || acc.aliasHistory.length === 0)) {
+      return {
+        ...acc,
+        aliasHistory: [
+          { address: acc.nextAlias, generatedAt: new Date().toISOString() },
+        ],
+      }
+    }
+    return acc
+  })
 }
 
 // ── 原有 Helper 包装器（委托给纯函数，向后兼容） ──
