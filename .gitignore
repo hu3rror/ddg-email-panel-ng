@@ -59,4 +59,4 @@ Thumbs.db
 
 .pi-subagents/
 *.md
-!README.md
+!README*.md
