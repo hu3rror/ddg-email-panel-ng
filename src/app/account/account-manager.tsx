@@ -63,6 +63,14 @@ export function AccountManager() {
           </div>
         ))}
       </div>
+
+      <button
+        type="button"
+        onClick={() => router.push('/login?next=/account')}
+        className="w-full py-2.5 mt-2 border-2 border-dashed border-[var(--border-default)] rounded-btn text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-muted)] transition-colors"
+      >
+        + Add Account
+      </button>
     </div>
   )
 }

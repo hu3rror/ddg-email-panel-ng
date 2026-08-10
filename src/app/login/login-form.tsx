@@ -1,17 +1,20 @@
 'use client'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import {
   requestOtpSchema,
   verifyOtpSchema,
   accessTokenLoginSchema,
 } from '@/core/schemas/auth'
-import { accountsAtom, activeAccountIdAtom, Account } from '@/core/store/account'
+import { accountsAtom, activeAccountIdAtom, activeAccountAtom, Account } from '@/core/store/account'
 
-export function LoginForm() {
+export function LoginForm({ next = '/email' }: { next?: string }) {
   const router = useRouter()
+  const accounts = useAtomValue(accountsAtom)
+  const activeAccount = useAtomValue(activeAccountAtom)
   const setAccounts = useSetAtom(accountsAtom)
   const setActiveAccountId = useSetAtom(activeAccountIdAtom)
 
@@ -21,6 +24,34 @@ export function LoginForm() {
   const [errorMsg, setErrorMsg] = useState('')
   const [loading, setLoading] = useState(false)
   const [mode, setMode] = useState<'username' | 'otp' | 'token'>('username')
+
+  const isAddingAccount = accounts.length > 0
+
+  const addingBanner = isAddingAccount ? (
+    <div className="text-xs text-[var(--text-secondary)] bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded-btn px-3 py-2 text-center">
+      You are currently logged in as{' '}
+      <Link
+        href="/email"
+        className="underline hover:text-[var(--text-primary)] transition-colors"
+      >
+        {activeAccount?.email || `${activeAccount?.username}@duck.com`}
+      </Link>.
+      Adding another account will switch to it.
+    </div>
+  ) : null
+
+  const handleDuplicate = (username: string): boolean => {
+    const existing = accounts.find(
+      (a) => a.username.toLowerCase() === username.toLowerCase()
+    )
+    if (existing) {
+      setErrorMsg(
+        `Account ${existing.email || existing.username + '@duck.com'} is already in your list.`
+      )
+      return true
+    }
+    return false
+  }
 
   // 发送 OTP 邮件
   const handleSendOtp = async (e: React.FormEvent) => {
@@ -89,6 +120,12 @@ export function LoginForm() {
 
       const userData = await res.json()
 
+      // 去重检查
+      if (handleDuplicate(userData.username)) {
+        setLoading(false)
+        return
+      }
+
       const newAccount: Account = {
         id: crypto.randomUUID(),
         username: userData.username,
@@ -100,7 +137,7 @@ export function LoginForm() {
       setAccounts((prev) => [...prev, newAccount])
       setActiveAccountId(newAccount.id)
 
-      router.push('/email')
+      router.push(next)
     } catch (err: any) {
       setErrorMsg(err.message || 'Error verifying OTP')
     } finally {
@@ -121,6 +158,12 @@ export function LoginForm() {
 
     setLoading(true)
     try {
+      // 去重检查
+      if (handleDuplicate(parseResult.data.username)) {
+        setLoading(false)
+        return
+      }
+
       const res = await fetch('/api/alias/generate', {
         method: 'POST',
         headers: {
@@ -145,7 +188,7 @@ export function LoginForm() {
       setAccounts((prev) => [...prev, newAccount])
       setActiveAccountId(newAccount.id)
 
-      router.push('/email')
+      router.push(next)
     } catch (err: any) {
       setErrorMsg(err.message || 'The Access Token is invalid or expired')
     } finally {
@@ -157,6 +200,7 @@ export function LoginForm() {
   if (mode === 'otp') {
     return (
       <form onSubmit={handleVerifyOtp} className="flex flex-col gap-4 max-w-sm w-full mx-auto p-6">
+        {addingBanner}
         <div className="text-center">
           <h2 className="text-xl font-bold text-[var(--text-primary)]">Check your inbox!</h2>
           <p className="text-xs text-[var(--text-secondary)] mt-1">
@@ -201,6 +245,7 @@ export function LoginForm() {
   if (mode === 'token') {
     return (
       <form onSubmit={handleTokenLogin} className="flex flex-col gap-4 max-w-sm w-full mx-auto p-6">
+        {addingBanner}
         <div className="text-center">
           <h2 className="text-xl font-bold text-[var(--text-primary)]">Login using Access Token</h2>
           <p className="text-xs text-[var(--text-secondary)] mt-1">Enter your Duck Address and API Access Token</p>
@@ -256,6 +301,7 @@ export function LoginForm() {
   // ── 默认 Duck Address 登录界面 ──
   return (
     <form onSubmit={handleSendOtp} className="flex flex-col gap-4 max-w-sm w-full mx-auto p-6">
+      {addingBanner}
       <div className="flex flex-col gap-2">
         <label htmlFor="username" className="text-sm font-medium text-[var(--text-primary)]">
           Enter your Duck Address

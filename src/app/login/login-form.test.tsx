@@ -1,6 +1,8 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
+import { createStore, Provider } from 'jotai'
 import { LoginForm } from './login-form'
+import { addAccountHelper } from '@/core/store/account'
 
 describe('LoginForm Component', () => {
   it('应当渲染 Duck Address 输入框和 Exact Login 提交按钮', () => {
@@ -55,5 +57,23 @@ describe('LoginForm Component', () => {
     await waitFor(() => {
       expect(screen.queryByText(/cannot be empty/i)).not.toBeInTheDocument()
     })
+  })
+
+  it('已登录时显示添加入口提示横幅', () => {
+    const store = createStore()
+    addAccountHelper(store, {
+      username: 'duck1',
+      email: 'duck1@duck.com',
+      access_token: 'tok1',
+    })
+
+    render(
+      <Provider store={store}>
+        <LoginForm next="/account" />
+      </Provider>
+    )
+
+    expect(screen.getByText(/You are currently logged in as/i)).toBeInTheDocument()
+    expect(screen.getByText(/Adding another account will switch to it/i)).toBeInTheDocument()
   })
 })

@@ -26,4 +26,21 @@ describe('AccountManager Component', () => {
 
     expect(store.get(accountsAtom)).toHaveLength(0)
   })
+
+  it('有账号时应显示 + Add Account 按钮', () => {
+    const store = createStore()
+    addAccountHelper(store, {
+      username: 'duck1',
+      email: 'duck1@duck.com',
+      access_token: 'tok1',
+    })
+
+    render(
+      <Provider store={store}>
+        <AccountManager />
+      </Provider>
+    )
+
+    expect(screen.getByRole('button', { name: /\+ Add Account/i })).toBeInTheDocument()
+  })
 })

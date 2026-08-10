@@ -43,4 +43,24 @@ describe('AccountSwitcher Component', () => {
     fireEvent.change(select, { target: { value: acc1.id } })
     expect(store.get(activeAccountIdAtom)).toBe(acc1.id)
   })
+
+  it('有账号时应包含 + Add Account 选项', () => {
+    const store = createStore()
+    addAccountHelper(store, {
+      username: 'duck1',
+      email: 'duck1@duck.com',
+      access_token: 'tok1',
+    })
+
+    render(
+      <Provider store={store}>
+        <AccountSwitcher />
+      </Provider>
+    )
+
+    const select = screen.getByRole('combobox')
+    const options = Array.from(select.options).map((o) => o.value)
+    expect(options).toContain('__add__')
+    expect(screen.getByText('+ Add Account')).toBeInTheDocument()
+  })
 })
