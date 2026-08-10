@@ -10,10 +10,6 @@ out/
 dist/
 build/
 
-# Serwist / PWA generated service workers
-public/sw.js
-public/sw.js.map
-public/workbox-*.js
 
 # Environment variables
 .env

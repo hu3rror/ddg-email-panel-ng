@@ -9,4 +9,12 @@ describe('PWA Web Manifest', () => {
     expect(config.start_url).toBe('/')
     expect(config.theme_color).toBe('#0284c7')
   })
+
+  it('应当引用可访问的 192x192 和 512x512 图标', () => {
+    const config = manifest()
+    expect(config.icons).toBeDefined()
+    const sizes = config.icons!.map((i) => i.sizes)
+    expect(sizes).toContain('192x192')
+    expect(sizes).toContain('512x512')
+  })
 })

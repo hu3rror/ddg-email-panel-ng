@@ -21,6 +21,16 @@ const themeInitScript = `
 })();
 `
 
+const swRegisterScript = `
+(function() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+})();
+`
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,6 +40,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: swRegisterScript }} />
       </head>
       <body className="min-h-screen flex flex-col font-sans">
         <Nav />
