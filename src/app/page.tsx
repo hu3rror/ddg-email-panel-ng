@@ -1,11 +1,34 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getCommitSha } from '@/core/env'
 
 export default function HomePage() {
+  const router = useRouter()
   const commitSha = getCommitSha()
+  const [fading, setFading] = useState(false)
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('ddg_accounts')
+      if (raw) {
+        const accounts = JSON.parse(raw)
+        if (Array.isArray(accounts) && accounts.length > 0) {
+          // 先触发淡出动画，动画结束后再跳转，避免生硬的瞬时切换
+          setFading(true)
+          const timer = setTimeout(() => router.replace('/email'), 250)
+          return () => clearTimeout(timer)
+        }
+      }
+    } catch {}
+  }, [router])
 
   return (
-    <main className="flex-1 flex flex-col items-center justify-center p-24">
+    <main
+      className={`flex-1 flex flex-col items-center justify-center p-24 transition-opacity duration-300 ease-out ${fading ? 'opacity-0' : 'opacity-100'}`}
+    >
       <div className="z-10 max-w-5xl w-full items-center justify-between text-sm flex flex-col gap-6 text-center">
         <h1 className="text-4xl font-bold tracking-tight text-[var(--text-primary)]">DDG Email Panel</h1>
         <p className="text-[var(--text-secondary)] max-w-md">
