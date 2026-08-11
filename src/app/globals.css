@@ -73,16 +73,6 @@ html.theme-transitioning *::after {
 /* ── Mobile responsive ── */
 @media (max-width: 640px) {
   .nav-container {
-    flex-direction: column;
-    gap: 0.5rem;
     padding: 0.5rem 1rem;
-  }
-  .nav-container .nav-links {
-    flex-wrap: wrap;
-    gap: 0.25rem 0.75rem;
-  }
-  .nav-container .nav-actions {
-    width: 100%;
-    justify-content: flex-end;
   }
 }

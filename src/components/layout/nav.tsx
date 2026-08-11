@@ -1,39 +1,82 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
+import { Mail, User, Github, Menu, X } from 'lucide-react'
 import { AccountSwitcher } from './account-switcher'
 import { ThemeToggle } from '@/components/theme-toggle'
 
 const GITHUB_URL = 'https://github.com/hu3rror/ddg-email-panel-ng'
 
 export function Nav() {
+  const [open, setOpen] = useState(false)
+
   return (
-    <header className="w-full border-b border-[var(--border-default)] bg-[var(--bg-surface)]/50 backdrop-blur px-6 py-3">
-      <div className="nav-container flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4 sm:gap-6 nav-links">
-          <Link href="/email" className="font-bold text-lg tracking-tight text-[var(--text-primary)] whitespace-nowrap">
+    <header className="w-full border-b border-[var(--border-default)] bg-[var(--bg-surface)]/50 backdrop-blur">
+      <div className="nav-container flex items-center justify-between gap-4 px-6 py-3">
+        <div className="flex items-center gap-6 sm:gap-10">
+          <Link href="/email" className="flex items-center gap-2 font-bold text-lg tracking-tight text-[var(--text-primary)] whitespace-nowrap">
+            <img src="/favicon.svg" alt="" className="w-6 h-6 rounded" />
             DDG Email Panel
           </Link>
 
-          <nav className="flex items-center gap-4 text-sm font-medium text-[var(--text-secondary)]">
-            <Link href="/email" className="hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
+          <nav className="hidden sm:flex items-center gap-6 text-sm font-medium text-[var(--text-secondary)]">
+            <Link href="/email" className="flex items-center gap-1.5 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
+              <Mail className="w-4 h-4" />
               Email
             </Link>
-            <Link href="/account" className="hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
+            <Link href="/account" className="flex items-center gap-1.5 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
+              <User className="w-4 h-4" />
               Account
             </Link>
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
+              <Github className="w-4 h-4" />
               About
             </a>
           </nav>
         </div>
 
-        <div className="flex items-center gap-3 nav-actions shrink-0">
-          <AccountSwitcher />
-          <ThemeToggle />
+        <div className="flex items-center gap-6">
+          <div className="hidden sm:flex items-center gap-6 nav-actions shrink-0">
+            <AccountSwitcher />
+            <ThemeToggle />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            className="sm:hidden flex items-center justify-center w-9 h-9 rounded-md text-[var(--text-secondary)] hover:text-ddg-blue dark:hover:text-ddg-blue-dark hover:bg-[var(--bg-surface-hover)] transition-colors"
+          >
+            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
+
+      {open && (
+        <div className="sm:hidden border-t border-[var(--border-default)] px-6 py-4 flex flex-col gap-4">
+          <nav className="flex flex-col gap-3 text-sm font-medium text-[var(--text-secondary)]">
+            <Link href="/email" onClick={() => setOpen(false)} className="flex items-center gap-2 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
+              <Mail className="w-4 h-4" />
+              Email
+            </Link>
+            <Link href="/account" onClick={() => setOpen(false)} className="flex items-center gap-2 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
+              <User className="w-4 h-4" />
+              Account
+            </Link>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
+              <Github className="w-4 h-4" />
+              About
+            </a>
+          </nav>
+
+          <div className="flex items-center gap-6 border-t border-[var(--border-default)] pt-4">
+            <AccountSwitcher />
+            <ThemeToggle />
+          </div>
+        </div>
+      )}
     </header>
   )
 }
