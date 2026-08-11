@@ -2,32 +2,27 @@
 
 开源的 DuckDuckGo Email Protection 非官方面板，原生部署在 Vercel 上。
 
-灵感源自 [whatk233/ddg-email-panel](https://github.com/whatk233/ddg-email-panel) 分支，用 Next.js 15 App Router 重构。
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fhu3rror%2Fddg-email-panel-ng)
+
+[English](./README.md)
 
 ## 功能
 
-- **多账户管理。** 用多个 Duck 邮箱地址登录，自由切换，集中管理。
+- **多账户管理。** 添加多个 Duck 邮箱地址，自由切换，集中管理。
 - **两种登录方式。** Access Token（稳定、无需验证码）或发到 Duck 邮箱的一次性口令（OTP）。
 - **私密 Duck 地址。** 一键生成新的私密别名，复制到剪贴板，并保留最近 10 条历史。
 - **别名历史。** 每个账户单独记录生成的地址和时间戳，超过 10 条自动淘汰最旧的。
+- **账户管理。** 重命名或删除账户，随时查看当前活跃的是哪个。
+- **智能着陆页。** 已登录用户访问首页直接跳转到 `/email`，不再看到多余的登录页面。
 - **深色模式。** 一键切换主题，选择会保存在 localStorage。
-- **国际化。** 支持英文、简体中文等等。
+- **国际化。** 英文、简体中文、日本語。
+- **PWA。** 可安装到桌面，支持 Service Worker 和图标。
 
-## 技术栈
+## 一键部署
 
-| 层 | 选型 |
-|---|---|
-| 框架 | Next.js 15（App Router） |
-| 语言 | TypeScript（严格模式） |
-| UI | Tailwind CSS v4 |
-| 状态 | Jotai v2（`atomWithStorage`） |
-| 校验 | Zod |
-| API | Edge Runtime 路由处理器 |
-| 测试 | Vitest + Testing Library |
-| PWA | Service Worker + manifest |
-| 包管理器 | pnpm |
+最快的方式是点击上方的 Vercel 按钮。它会直接克隆仓库并部署一个新项目，无需任何配置——不需要设置环境变量。着陆页显示的 Commit SHA 会自动从 Vercel 构建环境中读取。
 
-## 快速开始
+## 本地开发
 
 ```bash
 pnpm install
@@ -43,48 +38,22 @@ pnpm dev
 | `pnpm dev` | 启动开发服务器 |
 | `pnpm build` | 生产构建 |
 | `pnpm start` | 启动生产服务器 |
-| `pnpm test` | 运行测试（58 个全部通过） |
+| `pnpm test` | 运行测试 |
 | `pnpm test:watch` | 监听模式 |
 
-## 项目结构
+## 技术栈
 
-```
-src/
-├── app/
-│   ├── account/          # 账户管理页面
-│   ├── api/              # Edge 路由处理器
-│   │   └── alias/generate
-│   │   └── auth/login
-│   │   └── auth/loginlink
-│   ├── email/            # 邮箱仪表板（别名生成、历史）
-│   ├── login/            # 登录表单（OTP + Access Token）
-│   ├── globals.css       # 设计令牌、明暗主题变量
-│   ├── layout.tsx        # 根布局、主题初始化脚本
-│   ├── manifest.ts       # PWA manifest
-│   └── sw.ts             # Service Worker
-├── components/
-│   ├── copy-button.tsx
-│   ├── theme-toggle.tsx
-│   └── layout/
-│       ├── account-switcher.tsx
-│       └── nav.tsx
-├── core/
-│   ├── constants.ts
-│   ├── ddg/client.ts     # DuckDuckGo API 客户端
-│   ├── env.ts            # Commit SHA、Vercel 环境变量
-│   ├── hooks/
-│   │   ├── use-auth.ts   # 认证 Hook（sendOtp、verifyOtp、loginWithToken）
-│   │   └── use-hydrated.ts
-│   ├── schemas/auth.ts   # Zod 校验
-│   └── store/account.ts  # Jotai atoms、纯函数状态操作
-├── i18n/
-│   └── routing.ts
-└── middleware.ts
-messages/
-├── en.json
-├── zh-CN.json
-└── ja-JP.json
-```
+| 层 | 选型 |
+|---|---|
+| 框架 | Next.js 15（App Router） |
+| 语言 | TypeScript（严格模式） |
+| UI | Tailwind CSS v4 |
+| 状态 | Jotai v2（`atomWithStorage`） |
+| 校验 | Zod |
+| API | Edge Runtime 路由处理器 |
+| 测试 | Vitest + Testing Library |
+| PWA | Service Worker + manifest |
+| 包管理器 | pnpm |
 
 ## 术语表
 

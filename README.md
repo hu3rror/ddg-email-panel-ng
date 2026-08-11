@@ -1,19 +1,45 @@
 # DDG Email Panel
 
-Open source, unofficial panel for DuckDuckGo Email Protection. Deployed on Vercel.
+Open source, unofficial panel for DuckDuckGo Email Protection. Deployed natively on Vercel.
 
-Idea from [whatk233/ddg-email-panel](https://github.com/whatk233/ddg-email-panel), rebuilt from scratch with Next.js 15 App Router.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fhu3rror%2Fddg-email-panel-ng)
 
 [中文](./README_zh-CN.md)
 
 ## Features
 
-- **Multi-account.** Log in with multiple Duck Addresses, switch between them, manage them from one place.
+- **Multi-account.** Add multiple Duck Addresses, switch between them, and manage them all in one place.
 - **Two login methods.** Access Token (reliable, no captcha) or OTP passphrase sent to your Duck Address.
-- **Private Duck Addresses.** Generate a new private alias, copy it to your clipboard, keep a history of the last 10.
-- **Alias history.** Every generated address is stored per account with a timestamp. Oldest entries drop off at 10.
-- **Dark mode.** Toggle theme. Your choice is saved to localStorage.
-- **i18n.** English, 中文 (Simplified) etc.
+- **Private Duck Addresses.** Generate a new private alias in one click, copy it to your clipboard, and keep a history of the last 10.
+- **Alias history.** Every generated address is stored per account with a timestamp. The oldest entries drop off at 10.
+- **Account management.** Rename or remove accounts, and see which one is active.
+- **Smart landing page.** Already signed in? Visiting the root URL takes you straight to `/email` — no redundant login screen.
+- **Dark mode.** Toggle theme and it's saved to localStorage.
+- **i18n.** English, 简体中文, 日本語.
+- **PWA.** Installable, with a service worker and app icons.
+
+## One-click deploy
+
+The fastest way to run your own instance is the Vercel button above. It clones the repo and deploys a new project with zero configuration — no environment variables are required. The commit SHA shown on the landing page is picked up automatically from Vercel's build environment.
+
+## Local development
+
+```bash
+pnpm install
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Commands
+
+| Command | What it does |
+|---|---|
+| `pnpm dev` | Start the dev server |
+| `pnpm build` | Production build |
+| `pnpm start` | Start the production server |
+| `pnpm test` | Run the test suite |
+| `pnpm test:watch` | Watch mode |
 
 ## Stack
 
@@ -28,65 +54,6 @@ Idea from [whatk233/ddg-email-panel](https://github.com/whatk233/ddg-email-panel
 | Tests | Vitest + Testing Library |
 | PWA | Service worker + manifest |
 | Package manager | pnpm |
-
-## Getting started
-
-```bash
-pnpm install
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-## Commands
-
-| Command | What it does |
-|---|---|
-| `pnpm dev` | Start dev server |
-| `pnpm build` | Production build |
-| `pnpm start` | Start production server |
-| `pnpm test` | Run tests (58 passing) |
-| `pnpm test:watch` | Watch mode |
-
-## Project structure
-
-```
-src/
-├── app/
-│   ├── account/          # Account management page
-│   ├── api/              # Edge route handlers
-│   │   └── alias/generate
-│   │   └── auth/login
-│   │   └── auth/loginlink
-│   ├── email/            # Email dashboard (alias generation, history)
-│   ├── login/            # Login form (OTP + Access Token)
-│   ├── globals.css       # Design tokens, light/dark vars
-│   ├── layout.tsx        # Root layout, theme init script
-│   ├── manifest.ts       # PWA manifest
-│   └── sw.ts             # Service worker
-├── components/
-│   ├── copy-button.tsx
-│   ├── theme-toggle.tsx
-│   └── layout/
-│       ├── account-switcher.tsx
-│       └── nav.tsx
-├── core/
-│   ├── constants.ts
-│   ├── ddg/client.ts     # DuckDuckGo API client
-│   ├── env.ts            # Commit SHA, Vercel env
-│   ├── hooks/
-│   │   ├── use-auth.ts   # Auth hook (sendOtp, verifyOtp, loginWithToken)
-│   │   └── use-hydrated.ts
-│   ├── schemas/auth.ts   # Zod schemas
-│   └── store/account.ts  # Jotai atoms, pure store functions
-├── i18n/
-│   └── routing.ts
-└── middleware.ts
-messages/
-├── en.json
-├── zh-CN.json
-└── ja-JP.json
-```
 
 ## Domain glossary
 
