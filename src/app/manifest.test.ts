@@ -7,7 +7,7 @@ describe('PWA Web Manifest', () => {
     expect(config.name).toBe('DDG Email Panel')
     expect(config.display).toBe('standalone')
     expect(config.start_url).toBe('/')
-    expect(config.theme_color).toBe('#0284c7')
+    expect(config.theme_color).toBe('#DE5833')
   })
 
   it('应当引用可访问的 192x192 和 512x512 图标', () => {
