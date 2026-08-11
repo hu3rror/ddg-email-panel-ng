@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Nav } from '@/components/layout/nav'
+import { HtmlLangSync } from '@/components/layout/html-lang-sync'
 
 export const metadata: Metadata = {
   title: 'DDG Email Panel',
@@ -51,6 +52,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: swRegisterScript }} />
       </head>
       <body className="min-h-screen flex flex-col font-sans">
+        <HtmlLangSync />
         <Nav />
         {children}
       </body>

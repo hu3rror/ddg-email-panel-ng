@@ -1,0 +1,65 @@
+{
+  "nav": {
+    "title": "DDG ईमेल पैनल",
+    "email": "ईमेल",
+    "account": "खाता",
+    "about": "जानकारी",
+    "openMenu": "मेन्यू खोलें",
+    "closeMenu": "मेन्यू बंद करें"
+  },
+  "login": {
+    "title": "अपना Duck पता दर्ज करें",
+    "loginButton": "लॉगिन करें",
+    "tokenLogin": "Access Token से लॉगिन करें",
+    "addingBannerPrefix": "आप इस रूप में लॉग इन हैं: ",
+    "addingBannerSuffix": "कोई और खाता जोड़ने पर उस पर स्विच हो जाएगा।",
+    "otpTitle": "अपना इनबॉक्स जाँचें!",
+    "otpDescription": "पासफ़्रेज़ {email} पर भेजा गया",
+    "otpPlaceholder": "एक-बार पासफ़्रेज़ दर्ज करें",
+    "otpContinue": "जारी रखें",
+    "otpVerifying": "सत्यापित किया जा रहा है...",
+    "otpBack": "वापस",
+    "tokenTitle": "Access Token से लॉगिन करें",
+    "tokenDescription": "अपना Duck पता और API Access Token दर्ज करें",
+    "tokenDuckPlaceholder": "Duck पता",
+    "tokenPlaceholder": "अपना Access Token दर्ज करें",
+    "tokenLoggingIn": "लॉगिन हो रहा है...",
+    "tokenLoginButton": "लॉगिन",
+    "tokenBack": "उपयोगकर्ता नाम लॉगिन पर वापस जाएँ",
+    "usernameLabel": "अपना Duck पता दर्ज करें",
+    "usernamePlaceholder": "Duck पता",
+    "usernameSending": "भेजा जा रहा है...",
+    "usernameLoginButton": "लॉगिन",
+    "usernameTokenLink": "Access Token से लॉगिन करें"
+  },
+  "email": {
+    "mainDuckAddress": "मुख्य Duck पता",
+    "privateDuckAddress": "निजी Duck पता",
+    "noAliasYet": "अभी तक कोई उपनाम नहीं बनाया गया",
+    "generateButton": "निजी Duck पता जनरेट करें",
+    "generating": "जनरेट किया जा रहा है...",
+    "generateError": "निजी पता जनरेट करने में त्रुटि",
+    "noAccount": "कोई सक्रिय खाता नहीं मिला। ऊपर लॉगिन बटन का उपयोग करें।",
+    "recentAliases": "हाल के निजी Duck पते ({count}/{limit})",
+    "justNow": "अभी अभी",
+    "minutesAgo": "{n} मिनट पहले",
+    "hoursAgo": "{n} घंटे पहले",
+    "daysAgo": "{n} दिन पहले"
+  },
+  "account": {
+    "title": "खाता प्रबंधन",
+    "logOut": "लॉग आउट",
+    "addAccount": "+ खाता जोड़ें",
+    "noAccounts": "कोई लॉग इन खाता नहीं मिला।",
+    "idLabel": "ID"
+  },
+  "home": {
+    "title": "DDG ईमेल पैनल",
+    "description": "DuckDuckGo Email Protection के लिए ओपन सोर्स अनाधिकृत पैनल, Vercel पर मूल रूप से तैनात।",
+    "loginButton": "लॉगिन करें",
+    "version": "संस्करण: {sha}"
+  },
+  "common": {
+    "login": "लॉगिन करें"
+  }
+}

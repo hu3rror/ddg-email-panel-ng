@@ -1,0 +1,65 @@
+{
+  "nav": {
+    "title": "لوحة بريد DDG",
+    "email": "البريد",
+    "account": "الحساب",
+    "about": "حول",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة"
+  },
+  "login": {
+    "title": "أدخل عنوان Duck الخاص بك",
+    "loginButton": "تسجيل الدخول",
+    "tokenLogin": "تسجيل الدخول باستخدام Access Token",
+    "addingBannerPrefix": "أنت مسجل الدخول باسم ",
+    "addingBannerSuffix": ". سيؤدي إضافة حساب آخر إلى التبديل إليه.",
+    "otpTitle": "تحقق من بريدك الوارد!",
+    "otpDescription": "تم إرسال عبارة المرور إلى {email}",
+    "otpPlaceholder": "أدخل عبارة المرور لمرة واحدة",
+    "otpContinue": "متابعة",
+    "otpVerifying": "جارٍ التحقق...",
+    "otpBack": "رجوع",
+    "tokenTitle": "تسجيل الدخول باستخدام Access Token",
+    "tokenDescription": "أدخل عنوان Duck الخاص بك و Access Token",
+    "tokenDuckPlaceholder": "عنوان Duck",
+    "tokenPlaceholder": "أدخل Access Token الخاص بك",
+    "tokenLoggingIn": "جارٍ تسجيل الدخول...",
+    "tokenLoginButton": "تسجيل الدخول",
+    "tokenBack": "العودة إلى تسجيل الدخول باسم المستخدم",
+    "usernameLabel": "أدخل عنوان Duck الخاص بك",
+    "usernamePlaceholder": "عنوان Duck",
+    "usernameSending": "جارٍ الإرسال...",
+    "usernameLoginButton": "تسجيل الدخول",
+    "usernameTokenLink": "تسجيل الدخول باستخدام Access Token"
+  },
+  "email": {
+    "mainDuckAddress": "عنوان Duck الرئيسي",
+    "privateDuckAddress": "عنوان Duck الخاص",
+    "noAliasYet": "لم يتم إنشاء أي اسم مستعار بعد",
+    "generateButton": "إنشاء عنوان Duck خاص",
+    "generating": "جارٍ الإنشاء...",
+    "generateError": "خطأ في إنشاء العنوان الخاص",
+    "noAccount": "لم يتم العثور على حساب نشط. استخدم زر تسجيل الدخول أعلاه.",
+    "recentAliases": "عناوين Duck الخاصة الأخيرة ({count}/{limit})",
+    "justNow": "الآن",
+    "minutesAgo": "منذ {n} دقيقة",
+    "hoursAgo": "منذ {n} ساعة",
+    "daysAgo": "منذ {n} يوم"
+  },
+  "account": {
+    "title": "إدارة الحساب",
+    "logOut": "تسجيل الخروج",
+    "addAccount": "+ إضافة حساب",
+    "noAccounts": "لم يتم العثور على حسابات مسجلة الدخول.",
+    "idLabel": "المعرف"
+  },
+  "home": {
+    "title": "لوحة بريد DDG",
+    "description": "لوحة غير رسمية مفتوحة المصدر لـ DuckDuckGo Email Protection، منشورة أصلاً على Vercel.",
+    "loginButton": "تسجيل الدخول",
+    "version": "الإصدار: {sha}"
+  },
+  "common": {
+    "login": "تسجيل الدخول"
+  }
+}

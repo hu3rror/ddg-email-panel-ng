@@ -5,11 +5,14 @@ import Link from 'next/link'
 import { Mail, User, Github, Menu, X } from 'lucide-react'
 import { AccountSwitcher } from './account-switcher'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { LocaleSwitcher } from './locale-switcher'
+import { useMessages } from '@/i18n/use-messages'
 
 const GITHUB_URL = 'https://github.com/hu3rror/ddg-email-panel-ng'
 
 export function Nav() {
   const [open, setOpen] = useState(false)
+  const { t } = useMessages()
 
   return (
     <header className="w-full border-b border-[var(--border-default)] bg-[var(--bg-surface)]/50 backdrop-blur">
@@ -17,27 +20,28 @@ export function Nav() {
         <div className="flex items-center gap-6 sm:gap-10">
           <Link href="/email" className="flex items-center gap-2 font-bold text-lg tracking-tight text-[var(--text-primary)] whitespace-nowrap">
             <img src="/favicon.svg" alt="" className="w-6 h-6 rounded" />
-            DDG Email Panel
+            {t('nav.title')}
           </Link>
 
           <nav className="hidden sm:flex items-center gap-6 text-sm font-medium text-[var(--text-secondary)]">
             <Link href="/email" className="flex items-center gap-1.5 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
               <Mail className="w-4 h-4" />
-              Email
+              {t('nav.email')}
             </Link>
             <Link href="/account" className="flex items-center gap-1.5 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
               <User className="w-4 h-4" />
-              Account
+              {t('nav.account')}
             </Link>
             <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
               <Github className="w-4 h-4" />
-              About
+              {t('nav.about')}
             </a>
           </nav>
         </div>
 
         <div className="flex items-center gap-6">
           <div className="hidden sm:flex items-center gap-6 nav-actions shrink-0">
+            <LocaleSwitcher />
             <AccountSwitcher />
             <ThemeToggle />
           </div>
@@ -45,7 +49,7 @@ export function Nav() {
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-label={open ? t('nav.closeMenu') : t('nav.openMenu')}
             aria-expanded={open}
             className="sm:hidden flex items-center justify-center w-9 h-9 rounded-md text-[var(--text-secondary)] hover:text-ddg-blue dark:hover:text-ddg-blue-dark hover:bg-[var(--bg-surface-hover)] transition-colors"
           >
@@ -59,21 +63,24 @@ export function Nav() {
           <nav className="flex flex-col gap-3 text-sm font-medium text-[var(--text-secondary)]">
             <Link href="/email" onClick={() => setOpen(false)} className="flex items-center gap-2 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
               <Mail className="w-4 h-4" />
-              Email
+              {t('nav.email')}
             </Link>
             <Link href="/account" onClick={() => setOpen(false)} className="flex items-center gap-2 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
               <User className="w-4 h-4" />
-              Account
+              {t('nav.account')}
             </Link>
             <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
               <Github className="w-4 h-4" />
-              About
+              {t('nav.about')}
             </a>
           </nav>
 
-          <div className="flex items-center gap-6 border-t border-[var(--border-default)] pt-4">
-            <AccountSwitcher />
-            <ThemeToggle />
+          <div className="flex flex-col gap-4 border-t border-[var(--border-default)] pt-4">
+            <LocaleSwitcher />
+            <div className="flex items-center gap-6">
+              <AccountSwitcher />
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       )}

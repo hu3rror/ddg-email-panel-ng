@@ -11,21 +11,24 @@ import {
 } from '@/core/store/account'
 import { CopyButton } from '@/components/copy-button'
 import { useHydrated } from '@/core/hooks/use-hydrated'
+import { useMessages } from '@/i18n/use-messages'
 import { ShieldCheck, ChevronDown, ChevronRight } from 'lucide-react'
 
-function formatRelativeTime(isoString: string): string {
+type TranslateFn = (key: string, params?: Record<string, string>) => string
+
+function formatRelativeTime(isoString: string, t: TranslateFn): string {
   const now = Date.now()
   const then = new Date(isoString).getTime()
   const diffMs = now - then
   const diffSec = Math.floor(diffMs / 1000)
 
-  if (diffSec < 60) return 'Just now'
+  if (diffSec < 60) return t('email.justNow')
   const diffMin = Math.floor(diffSec / 60)
-  if (diffMin < 60) return `${diffMin}m ago`
+  if (diffMin < 60) return t('email.minutesAgo', { n: String(diffMin) })
   const diffHour = Math.floor(diffMin / 60)
-  if (diffHour < 24) return `${diffHour}h ago`
+  if (diffHour < 24) return t('email.hoursAgo', { n: String(diffHour) })
   const diffDay = Math.floor(diffHour / 24)
-  if (diffDay < 7) return `${diffDay}d ago`
+  if (diffDay < 7) return t('email.daysAgo', { n: String(diffDay) })
   // 超过 7 天显示日期
   return new Date(isoString).toLocaleDateString(undefined, {
     month: 'short',
@@ -42,6 +45,7 @@ function AliasHistoryPanel({
   open: boolean
   onToggle: () => void
 }) {
+  const { t } = useMessages()
   if (!history || history.length === 0) return null
 
   return (
@@ -52,7 +56,10 @@ function AliasHistoryPanel({
         className="flex items-center gap-2 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
       >
         {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-        Recent Private Duck Addresses ({history.length}/{ALIAS_HISTORY_LIMIT})
+        {t('email.recentAliases', {
+          count: String(history.length),
+          limit: String(ALIAS_HISTORY_LIMIT),
+        })}
       </button>
 
       <div
@@ -68,7 +75,7 @@ function AliasHistoryPanel({
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="text-xs text-[var(--text-muted)] shrink-0 min-w-[4.5rem] text-right whitespace-nowrap">
-                    {formatRelativeTime(entry.generatedAt)}
+                    {formatRelativeTime(entry.generatedAt, t)}
                   </span>
                   <span className="text-sm font-medium text-[var(--text-primary)] truncate">
                     {entry.address}@duck.com
@@ -85,6 +92,7 @@ function AliasHistoryPanel({
 }
 
 export function EmailDashboard() {
+  const { t } = useMessages()
   const hydrated = useHydrated()
   const activeAccount = useAtomValue(activeAccountAtom)
   const setAccounts = useSetAtom(accountsAtom)
@@ -120,7 +128,7 @@ export function EmailDashboard() {
   if (!activeAccount) {
     return (
       <div className="text-center p-8 text-[var(--text-secondary)]">
-        No active account found. Use the Login button above to sign in.
+        {t('email.noAccount')}
       </div>
     )
   }
@@ -152,7 +160,7 @@ export function EmailDashboard() {
         })
       )
     } catch (err: any) {
-      setErrorMsg(err.message || 'Error generating private address')
+      setErrorMsg(err.message || t('email.generateError'))
     } finally {
       setLoading(false)
     }
@@ -169,7 +177,7 @@ export function EmailDashboard() {
       {/* 主 Duck 地址 */}
       <div className="flex flex-col gap-2">
         <span className="text-xs font-semibold text-[var(--text-secondary)]">
-          Main Duck Address
+          {t('email.mainDuckAddress')}
         </span>
         <div className="flex items-center justify-between gap-4 p-3 rounded-card bg-[var(--bg-subtle)]">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--duck-pill-bg)] text-[var(--duck-pill-text)] text-base font-medium">
@@ -184,7 +192,7 @@ export function EmailDashboard() {
       {/* 私密 Duck 地址 */}
       <div className="flex flex-col gap-2">
         <span className="text-xs font-semibold text-[var(--text-secondary)]">
-          Private Duck Address
+          {t('email.privateDuckAddress')}
         </span>
         <div className="flex items-center justify-between gap-4 p-3 rounded-card bg-[var(--bg-subtle)]">
           {privateDuckAddress ? (
@@ -193,7 +201,7 @@ export function EmailDashboard() {
               {privateDuckAddress}
             </span>
           ) : (
-            <span className="text-sm italic text-[var(--text-muted)]">No alias generated yet</span>
+            <span className="text-sm italic text-[var(--text-muted)]">{t('email.noAliasYet')}</span>
           )}
           <CopyButton text={privateDuckAddress} disabled={!privateDuckAddress} />
         </div>
@@ -207,7 +215,7 @@ export function EmailDashboard() {
         disabled={loading}
         className="w-full py-2.5 bg-ddg-orange hover:bg-ddg-orange-hover text-white font-semibold rounded-btn text-sm disabled:opacity-50 transition-colors mt-2"
       >
-        {loading ? 'Generating...' : 'Generate Private Duck Address'}
+        {loading ? t('email.generating') : t('email.generateButton')}
       </button>
 
       {/* 别名历史折叠面板 */}

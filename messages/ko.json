@@ -1,0 +1,65 @@
+{
+  "nav": {
+    "title": "DDG 이메일 패널",
+    "email": "이메일",
+    "account": "계정",
+    "about": "정보",
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기"
+  },
+  "login": {
+    "title": "Duck 주소를 입력하세요",
+    "loginButton": "로그인",
+    "tokenLogin": "Access Token으로 로그인",
+    "addingBannerPrefix": "현재 로그인됨: ",
+    "addingBannerSuffix": "다른 계정을 추가하면 해당 계정으로 전환됩니다.",
+    "otpTitle": "받은편지함을 확인하세요!",
+    "otpDescription": "암호 문구가 {email}로 전송되었습니다",
+    "otpPlaceholder": "일회용 암호 문구 입력",
+    "otpContinue": "계속",
+    "otpVerifying": "확인 중...",
+    "otpBack": "뒤로",
+    "tokenTitle": "Access Token으로 로그인",
+    "tokenDescription": "Duck 주소와 API Access Token을 입력하세요",
+    "tokenDuckPlaceholder": "Duck 주소",
+    "tokenPlaceholder": "Access Token 입력",
+    "tokenLoggingIn": "로그인 중...",
+    "tokenLoginButton": "로그인",
+    "tokenBack": "사용자 이름 로그인으로 돌아가기",
+    "usernameLabel": "Duck 주소를 입력하세요",
+    "usernamePlaceholder": "Duck 주소",
+    "usernameSending": "전송 중...",
+    "usernameLoginButton": "로그인",
+    "usernameTokenLink": "Access Token으로 로그인"
+  },
+  "email": {
+    "mainDuckAddress": "기본 Duck 주소",
+    "privateDuckAddress": "비공개 Duck 주소",
+    "noAliasYet": "아직 생성된 별칭이 없습니다",
+    "generateButton": "비공개 Duck 주소 생성",
+    "generating": "생성 중...",
+    "generateError": "비공개 주소 생성 중 오류 발생",
+    "noAccount": "활성 계정이 없습니다. 위의 로그인 버튼을 사용하세요.",
+    "recentAliases": "최근 비공개 Duck 주소 ({count}/{limit})",
+    "justNow": "방금",
+    "minutesAgo": "{n}분 전",
+    "hoursAgo": "{n}시간 전",
+    "daysAgo": "{n}일 전"
+  },
+  "account": {
+    "title": "계정 관리",
+    "logOut": "로그아웃",
+    "addAccount": "+ 계정 추가",
+    "noAccounts": "로그인된 계정이 없습니다.",
+    "idLabel": "ID"
+  },
+  "home": {
+    "title": "DDG 이메일 패널",
+    "description": "DuckDuckGo Email Protection용 비공식 오픈소스 패널, Vercel에 네이티브 배포.",
+    "loginButton": "로그인",
+    "version": "버전: {sha}"
+  },
+  "common": {
+    "login": "로그인"
+  }
+}

@@ -2,11 +2,64 @@
   "nav": {
     "title": "DDG Email Panel",
     "email": "Email",
-    "account": "Account"
+    "account": "Account",
+    "about": "About",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "login": {
     "title": "Enter your Duck Address",
     "loginButton": "Login",
-    "tokenLogin": "Login using Access Token"
+    "tokenLogin": "Login using Access Token",
+    "addingBannerPrefix": "You are currently logged in as ",
+    "addingBannerSuffix": ". Adding another account will switch to it.",
+    "otpTitle": "Check your inbox!",
+    "otpDescription": "Passphrase sent to {email}",
+    "otpPlaceholder": "Enter One-time Passphrase",
+    "otpContinue": "Continue",
+    "otpVerifying": "Verifying...",
+    "otpBack": "Back",
+    "tokenTitle": "Login using Access Token",
+    "tokenDescription": "Enter your Duck Address and API Access Token",
+    "tokenDuckPlaceholder": "Duck Address",
+    "tokenPlaceholder": "Enter your Access Token",
+    "tokenLoggingIn": "Logging in...",
+    "tokenLoginButton": "Login",
+    "tokenBack": "Back to Username Login",
+    "usernameLabel": "Enter your Duck Address",
+    "usernamePlaceholder": "Duck Address",
+    "usernameSending": "Sending...",
+    "usernameLoginButton": "Login",
+    "usernameTokenLink": "Login using Access Token"
+  },
+  "email": {
+    "mainDuckAddress": "Main Duck Address",
+    "privateDuckAddress": "Private Duck Address",
+    "noAliasYet": "No alias generated yet",
+    "generateButton": "Generate Private Duck Address",
+    "generating": "Generating...",
+    "generateError": "Error generating private address",
+    "noAccount": "No active account found. Use the Login button above to sign in.",
+    "recentAliases": "Recent Private Duck Addresses ({count}/{limit})",
+    "justNow": "Just now",
+    "minutesAgo": "{n}m ago",
+    "hoursAgo": "{n}h ago",
+    "daysAgo": "{n}d ago"
+  },
+  "account": {
+    "title": "Account Management",
+    "logOut": "Log Out",
+    "addAccount": "+ Add Account",
+    "noAccounts": "No logged-in accounts found.",
+    "idLabel": "ID"
+  },
+  "home": {
+    "title": "DDG Email Panel",
+    "description": "Open source unofficial DuckDuckGo Email Protection panel, deployed natively on Vercel.",
+    "loginButton": "Login",
+    "version": "Version: {sha}"
+  },
+  "common": {
+    "login": "Login"
   }
 }

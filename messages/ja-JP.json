@@ -2,11 +2,64 @@
   "nav": {
     "title": "DDG メール面板",
     "email": "メール",
-    "account": "アカウント"
+    "account": "アカウント",
+    "about": "概要",
+    "openMenu": "メニューを開く",
+    "closeMenu": "メニューを閉じる"
   },
   "login": {
     "title": "Duckアドレスを入力してください",
     "loginButton": "ログイン",
-    "tokenLogin": "Access Token でログイン"
+    "tokenLogin": "Access Token でログイン",
+    "addingBannerPrefix": "現在ログインしています：",
+    "addingBannerSuffix": "別のアカウントを追加すると切り替わります。",
+    "otpTitle": "受信トレイを確認してください！",
+    "otpDescription": "パスフレーズを {email} に送信しました",
+    "otpPlaceholder": "ワンタイムパスフレーズを入力",
+    "otpContinue": "続行",
+    "otpVerifying": "確認中...",
+    "otpBack": "戻る",
+    "tokenTitle": "Access Token でログイン",
+    "tokenDescription": "Duckアドレスと API Access Token を入力してください",
+    "tokenDuckPlaceholder": "Duckアドレス",
+    "tokenPlaceholder": "Access Token を入力",
+    "tokenLoggingIn": "ログイン中...",
+    "tokenLoginButton": "ログイン",
+    "tokenBack": "ユーザー名ログインに戻る",
+    "usernameLabel": "Duckアドレスを入力してください",
+    "usernamePlaceholder": "Duckアドレス",
+    "usernameSending": "送信中...",
+    "usernameLoginButton": "ログイン",
+    "usernameTokenLink": "Access Token でログイン"
+  },
+  "email": {
+    "mainDuckAddress": "メイン Duck アドレス",
+    "privateDuckAddress": "プライベート Duck アドレス",
+    "noAliasYet": "エイリアス未生成",
+    "generateButton": "プライベート Duck アドレスを生成",
+    "generating": "生成中...",
+    "generateError": "プライベートアドレスの生成中にエラーが発生しました",
+    "noAccount": "アクティブなアカウントが見つかりません。上のログインボタンからサインインしてください。",
+    "recentAliases": "最近のプライベート Duck アドレス ({count}/{limit})",
+    "justNow": "たった今",
+    "minutesAgo": "{n} 分前",
+    "hoursAgo": "{n} 時間前",
+    "daysAgo": "{n} 日前"
+  },
+  "account": {
+    "title": "アカウント管理",
+    "logOut": "ログアウト",
+    "addAccount": "+ アカウントを追加",
+    "noAccounts": "ログイン済みのアカウントはありません。",
+    "idLabel": "ID"
+  },
+  "home": {
+    "title": "DDG メール面板",
+    "description": "オープンソースの非公式 DuckDuckGo Email Protection パネル、Vercel にネイティブデプロイ。",
+    "loginButton": "ログイン",
+    "version": "バージョン: {sha}"
+  },
+  "common": {
+    "login": "ログイン"
   }
 }

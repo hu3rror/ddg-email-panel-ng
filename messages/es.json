@@ -1,0 +1,65 @@
+{
+  "nav": {
+    "title": "Panel de correo DDG",
+    "email": "Correo",
+    "account": "Cuenta",
+    "about": "Acerca de",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "login": {
+    "title": "Introduce tu dirección de Duck",
+    "loginButton": "Iniciar sesión",
+    "tokenLogin": "Iniciar sesión con Access Token",
+    "addingBannerPrefix": "Has iniciado sesión como ",
+    "addingBannerSuffix": ". Añadir otra cuenta cambiará a ella.",
+    "otpTitle": "¡Revisa tu bandeja de entrada!",
+    "otpDescription": "Frase de contraseña enviada a {email}",
+    "otpPlaceholder": "Introduce la frase de un solo uso",
+    "otpContinue": "Continuar",
+    "otpVerifying": "Verificando...",
+    "otpBack": "Atrás",
+    "tokenTitle": "Iniciar sesión con Access Token",
+    "tokenDescription": "Introduce tu dirección de Duck y tu Access Token",
+    "tokenDuckPlaceholder": "Dirección de Duck",
+    "tokenPlaceholder": "Introduce tu Access Token",
+    "tokenLoggingIn": "Iniciando sesión...",
+    "tokenLoginButton": "Iniciar sesión",
+    "tokenBack": "Volver al inicio de sesión con nombre",
+    "usernameLabel": "Introduce tu dirección de Duck",
+    "usernamePlaceholder": "Dirección de Duck",
+    "usernameSending": "Enviando...",
+    "usernameLoginButton": "Iniciar sesión",
+    "usernameTokenLink": "Iniciar sesión con Access Token"
+  },
+  "email": {
+    "mainDuckAddress": "Dirección Duck principal",
+    "privateDuckAddress": "Dirección Duck privada",
+    "noAliasYet": "Aún no se ha generado ningún alias",
+    "generateButton": "Generar dirección Duck privada",
+    "generating": "Generando...",
+    "generateError": "Error al generar la dirección privada",
+    "noAccount": "No se encontró ninguna cuenta activa. Usa el botón de inicio de sesión de arriba.",
+    "recentAliases": "Direcciones Duck privadas recientes ({count}/{limit})",
+    "justNow": "Ahora mismo",
+    "minutesAgo": "Hace {n} min",
+    "hoursAgo": "Hace {n} h",
+    "daysAgo": "Hace {n} d"
+  },
+  "account": {
+    "title": "Gestión de cuentas",
+    "logOut": "Cerrar sesión",
+    "addAccount": "+ Añadir cuenta",
+    "noAccounts": "No se encontraron cuentas conectadas.",
+    "idLabel": "ID"
+  },
+  "home": {
+    "title": "Panel de correo DDG",
+    "description": "Panel no oficial de código abierto para DuckDuckGo Email Protection, desplegado nativamente en Vercel.",
+    "loginButton": "Iniciar sesión",
+    "version": "Versión: {sha}"
+  },
+  "common": {
+    "login": "Iniciar sesión"
+  }
+}

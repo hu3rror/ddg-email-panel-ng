@@ -1,0 +1,65 @@
+{
+  "nav": {
+    "title": "Панель DDG Email",
+    "email": "Почта",
+    "account": "Аккаунт",
+    "about": "О проекте",
+    "openMenu": "Открыть меню",
+    "closeMenu": "Закрыть меню"
+  },
+  "login": {
+    "title": "Введите ваш Duck-адрес",
+    "loginButton": "Войти",
+    "tokenLogin": "Войти через Access Token",
+    "addingBannerPrefix": "Вы вошли как ",
+    "addingBannerSuffix": ". Добавление другого аккаунта переключит на него.",
+    "otpTitle": "Проверьте свой почтовый ящик!",
+    "otpDescription": "Кодовая фраза отправлена на {email}",
+    "otpPlaceholder": "Введите одноразовую кодовую фразу",
+    "otpContinue": "Продолжить",
+    "otpVerifying": "Проверка...",
+    "otpBack": "Назад",
+    "tokenTitle": "Войти через Access Token",
+    "tokenDescription": "Введите ваш Duck-адрес и API Access Token",
+    "tokenDuckPlaceholder": "Duck-адрес",
+    "tokenPlaceholder": "Введите ваш Access Token",
+    "tokenLoggingIn": "Вход...",
+    "tokenLoginButton": "Войти",
+    "tokenBack": "Вернуться ко входу по имени пользователя",
+    "usernameLabel": "Введите ваш Duck-адрес",
+    "usernamePlaceholder": "Duck-адрес",
+    "usernameSending": "Отправка...",
+    "usernameLoginButton": "Войти",
+    "usernameTokenLink": "Войти через Access Token"
+  },
+  "email": {
+    "mainDuckAddress": "Основной Duck-адрес",
+    "privateDuckAddress": "Приватный Duck-адрес",
+    "noAliasYet": "Псевдоним ещё не создан",
+    "generateButton": "Создать приватный Duck-адрес",
+    "generating": "Создание...",
+    "generateError": "Ошибка при создании приватного адреса",
+    "noAccount": "Активный аккаунт не найден. Используйте кнопку входа выше.",
+    "recentAliases": "Недавние приватные Duck-адреса ({count}/{limit})",
+    "justNow": "Только что",
+    "minutesAgo": "{n} мин назад",
+    "hoursAgo": "{n} ч назад",
+    "daysAgo": "{n} д назад"
+  },
+  "account": {
+    "title": "Управление аккаунтами",
+    "logOut": "Выйти",
+    "addAccount": "+ Добавить аккаунт",
+    "noAccounts": "Аккаунты не найдены.",
+    "idLabel": "ID"
+  },
+  "home": {
+    "title": "Панель DDG Email",
+    "description": "Неофициальная панель с открытым исходным кодом для DuckDuckGo Email Protection, развёрнутая на Vercel.",
+    "loginButton": "Войти",
+    "version": "Версия: {sha}"
+  },
+  "common": {
+    "login": "Войти"
+  }
+}

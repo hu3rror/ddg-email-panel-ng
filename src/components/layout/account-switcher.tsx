@@ -6,10 +6,12 @@ import { useRouter } from 'next/navigation'
 import { useAtom, useAtomValue } from 'jotai'
 import { accountsAtom, activeAccountIdAtom } from '@/core/store/account'
 import { useHydrated } from '@/core/hooks/use-hydrated'
+import { useMessages } from '@/i18n/use-messages'
 
 export function AccountSwitcher() {
   const router = useRouter()
   const hydrated = useHydrated()
+  const { t } = useMessages()
   const accounts = useAtomValue(accountsAtom)
   const [activeAccountId, setActiveAccountId] = useAtom(activeAccountIdAtom)
 
@@ -29,7 +31,7 @@ export function AccountSwitcher() {
         href="/login"
         className="px-4 py-1.5 text-sm font-semibold rounded-btn bg-ddg-orange hover:bg-ddg-orange-hover text-white transition-colors"
       >
-        Login
+        {t('common.login')}
       </Link>
     )
   }
@@ -54,7 +56,7 @@ export function AccountSwitcher() {
             {acc.email || `${acc.username}@duck.com`}
           </option>
         ))}
-        <option value="__add__">+ Add Account</option>
+        <option value="__add__">{t('account.addAccount')}</option>
       </select>
       <svg
         className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"

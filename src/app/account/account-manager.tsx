@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation'
 import { useAtom } from 'jotai'
 import { accountsAtom, activeAccountIdAtom } from '@/core/store/account'
 import { useHydrated } from '@/core/hooks/use-hydrated'
+import { useMessages } from '@/i18n/use-messages'
 
 export function AccountManager() {
   const router = useRouter()
   const hydrated = useHydrated()
+  const { t } = useMessages()
   const [accounts, setAccounts] = useAtom(accountsAtom)
   const [activeAccountId, setActiveAccountId] = useAtom(activeAccountIdAtom)
 
@@ -43,14 +45,14 @@ export function AccountManager() {
   if (accounts.length === 0) {
     return (
       <div className="text-center p-8 text-[var(--text-secondary)]">
-        No logged-in accounts found.
+        {t('account.noAccounts')}
       </div>
     )
   }
 
   return (
     <div className="flex flex-col gap-4 max-w-lg w-full mx-auto p-6 border border-[var(--border-default)] rounded-card bg-[var(--bg-surface)] shadow-sm">
-      <h2 className="text-xl font-bold tracking-tight text-[var(--text-primary)] mb-2">Account Management</h2>
+      <h2 className="text-xl font-bold tracking-tight text-[var(--text-primary)] mb-2">{t('account.title')}</h2>
 
       <div className="flex flex-col gap-3">
         {accounts.map((acc) => (
@@ -60,7 +62,7 @@ export function AccountManager() {
           >
             <div className="flex flex-col">
               <span className="text-sm font-medium text-[var(--text-primary)]">{acc.email || `${acc.username}@duck.com`}</span>
-              <span className="text-xs text-[var(--text-muted)]">ID: {acc.id.slice(0, 8)}...</span>
+              <span className="text-xs text-[var(--text-muted)]">{t('account.idLabel')}: {acc.id.slice(0, 8)}...</span>
             </div>
 
             <button
@@ -68,7 +70,7 @@ export function AccountManager() {
               onClick={() => handleRemoveAccount(acc.id)}
               className="px-3 py-1 text-xs font-medium rounded-btn border border-[var(--border-default)] bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
             >
-              Log Out
+              {t('account.logOut')}
             </button>
           </div>
         ))}
@@ -79,7 +81,7 @@ export function AccountManager() {
         onClick={() => router.push('/login?next=/account')}
         className="w-full py-2.5 mt-2 border-2 border-dashed border-[var(--border-default)] rounded-btn text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-muted)] transition-colors"
       >
-        + Add Account
+        {t('account.addAccount')}
       </button>
     </div>
   )

@@ -2,11 +2,64 @@
   "nav": {
     "title": "DDG 邮箱面板",
     "email": "邮箱",
-    "account": "账户"
+    "account": "账户",
+    "about": "关于",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单"
   },
   "login": {
     "title": "请输入你的 Duck 邮箱地址",
     "loginButton": "登录",
-    "tokenLogin": "使用 Access Token 登录"
+    "tokenLogin": "使用 Access Token 登录",
+    "addingBannerPrefix": "你当前已登录为 ",
+    "addingBannerSuffix": "。添加另一个账户将切换到该账户。",
+    "otpTitle": "请检查你的收件箱！",
+    "otpDescription": "口令已发送到 {email}",
+    "otpPlaceholder": "输入一次性口令",
+    "otpContinue": "继续",
+    "otpVerifying": "验证中...",
+    "otpBack": "返回",
+    "tokenTitle": "使用 Access Token 登录",
+    "tokenDescription": "输入你的 Duck 邮箱地址和 API Access Token",
+    "tokenDuckPlaceholder": "Duck 邮箱地址",
+    "tokenPlaceholder": "输入你的 Access Token",
+    "tokenLoggingIn": "登录中...",
+    "tokenLoginButton": "登录",
+    "tokenBack": "返回用户名登录",
+    "usernameLabel": "请输入你的 Duck 邮箱地址",
+    "usernamePlaceholder": "Duck 邮箱地址",
+    "usernameSending": "发送中...",
+    "usernameLoginButton": "登录",
+    "usernameTokenLink": "使用 Access Token 登录"
+  },
+  "email": {
+    "mainDuckAddress": "主 Duck 地址",
+    "privateDuckAddress": "私密 Duck 地址",
+    "noAliasYet": "尚未生成别名",
+    "generateButton": "生成私密 Duck 地址",
+    "generating": "生成中...",
+    "generateError": "生成私密地址时出错",
+    "noAccount": "未找到活跃账户，请使用上方的登录按钮登录。",
+    "recentAliases": "最近私密 Duck 地址 ({count}/{limit})",
+    "justNow": "刚刚",
+    "minutesAgo": "{n} 分钟前",
+    "hoursAgo": "{n} 小时前",
+    "daysAgo": "{n} 天前"
+  },
+  "account": {
+    "title": "账户管理",
+    "logOut": "退出登录",
+    "addAccount": "+ 添加账户",
+    "noAccounts": "没有已登录的账户。",
+    "idLabel": "ID"
+  },
+  "home": {
+    "title": "DDG 邮箱面板",
+    "description": "开源的 DuckDuckGo Email Protection 非官方面板，原生部署在 Vercel 上。",
+    "loginButton": "登录",
+    "version": "版本: {sha}"
+  },
+  "common": {
+    "login": "登录"
   }
 }

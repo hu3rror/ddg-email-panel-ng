@@ -15,7 +15,7 @@ Open source, unofficial panel for DuckDuckGo Email Protection. Deployed natively
 - **Account management.** Rename or remove accounts, and see which one is active.
 - **Smart landing page.** Already signed in? Visiting the root URL takes you straight to `/email` — no redundant login screen.
 - **Dark mode.** Toggle theme and it's saved to localStorage.
-- **i18n.** English, 简体中文, 日本語.
+- **i18n.** English, Español, Français, Deutsch, Italiano, Português (BR), Русский, 한국어, हिन्दी, العربية, Türkçe, 简体中文, 繁體中文, 日本語.
 - **PWA.** Installable, with a service worker and app icons.
 
 ## One-click deploy

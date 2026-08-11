@@ -1,0 +1,65 @@
+{
+  "nav": {
+    "title": "DDG E-Mail-Panel",
+    "email": "E-Mail",
+    "account": "Konto",
+    "about": "Über",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen"
+  },
+  "login": {
+    "title": "Gib deine Duck-Adresse ein",
+    "loginButton": "Anmelden",
+    "tokenLogin": "Mit Access Token anmelden",
+    "addingBannerPrefix": "Du bist angemeldet als ",
+    "addingBannerSuffix": ". Das Hinzufügen eines anderen Kontos wechselt zu diesem.",
+    "otpTitle": "Prüfe deinen Posteingang!",
+    "otpDescription": "Passphrase gesendet an {email}",
+    "otpPlaceholder": "Einmal-Passphrase eingeben",
+    "otpContinue": "Weiter",
+    "otpVerifying": "Überprüfen...",
+    "otpBack": "Zurück",
+    "tokenTitle": "Mit Access Token anmelden",
+    "tokenDescription": "Gib deine Duck-Adresse und deinen Access Token ein",
+    "tokenDuckPlaceholder": "Duck-Adresse",
+    "tokenPlaceholder": "Gib deinen Access Token ein",
+    "tokenLoggingIn": "Anmeldung läuft...",
+    "tokenLoginButton": "Anmelden",
+    "tokenBack": "Zurück zur Benutzernamen-Anmeldung",
+    "usernameLabel": "Gib deine Duck-Adresse ein",
+    "usernamePlaceholder": "Duck-Adresse",
+    "usernameSending": "Senden...",
+    "usernameLoginButton": "Anmelden",
+    "usernameTokenLink": "Mit Access Token anmelden"
+  },
+  "email": {
+    "mainDuckAddress": "Haupt-Duck-Adresse",
+    "privateDuckAddress": "Private Duck-Adresse",
+    "noAliasYet": "Noch kein Alias generiert",
+    "generateButton": "Private Duck-Adresse generieren",
+    "generating": "Generiere...",
+    "generateError": "Fehler beim Generieren der privaten Adresse",
+    "noAccount": "Kein aktives Konto gefunden. Verwende den Anmelde-Button oben.",
+    "recentAliases": "Letzte private Duck-Adressen ({count}/{limit})",
+    "justNow": "Gerade eben",
+    "minutesAgo": "Vor {n} Min",
+    "hoursAgo": "Vor {n} Std",
+    "daysAgo": "Vor {n} Tagen"
+  },
+  "account": {
+    "title": "Kontoverwaltung",
+    "logOut": "Abmelden",
+    "addAccount": "+ Konto hinzufügen",
+    "noAccounts": "Keine angemeldeten Konten gefunden.",
+    "idLabel": "ID"
+  },
+  "home": {
+    "title": "DDG E-Mail-Panel",
+    "description": "Open Source inoffizielles DuckDuckGo Email Protection Panel, nativ auf Vercel bereitgestellt.",
+    "loginButton": "Anmelden",
+    "version": "Version: {sha}"
+  },
+  "common": {
+    "login": "Anmelden"
+  }
+}

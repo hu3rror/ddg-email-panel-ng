@@ -1,0 +1,65 @@
+{
+  "nav": {
+    "title": "DDG E-posta Paneli",
+    "email": "E-posta",
+    "account": "Hesap",
+    "about": "Hakkında",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat"
+  },
+  "login": {
+    "title": "Duck adresinizi girin",
+    "loginButton": "Giriş Yap",
+    "tokenLogin": "Access Token ile giriş yap",
+    "addingBannerPrefix": "Şu anda giriş yaptınız: ",
+    "addingBannerSuffix": "Başka bir hesap eklemek ona geçer.",
+    "otpTitle": "Gelen kutunuzu kontrol edin!",
+    "otpDescription": "Parola {email} adresine gönderildi",
+    "otpPlaceholder": "Tek kullanımlık parolayı girin",
+    "otpContinue": "Devam",
+    "otpVerifying": "Doğrulanıyor...",
+    "otpBack": "Geri",
+    "tokenTitle": "Access Token ile giriş yap",
+    "tokenDescription": "Duck adresinizi ve Access Token'ınızı girin",
+    "tokenDuckPlaceholder": "Duck adresi",
+    "tokenPlaceholder": "Access Token'ınızı girin",
+    "tokenLoggingIn": "Giriş yapılıyor...",
+    "tokenLoginButton": "Giriş Yap",
+    "tokenBack": "Kullanıcı adı girişine geri dön",
+    "usernameLabel": "Duck adresinizi girin",
+    "usernamePlaceholder": "Duck adresi",
+    "usernameSending": "Gönderiliyor...",
+    "usernameLoginButton": "Giriş Yap",
+    "usernameTokenLink": "Access Token ile giriş yap"
+  },
+  "email": {
+    "mainDuckAddress": "Ana Duck adresi",
+    "privateDuckAddress": "Özel Duck adresi",
+    "noAliasYet": "Henüz takma ad oluşturulmadı",
+    "generateButton": "Özel Duck adresi oluştur",
+    "generating": "Oluşturuluyor...",
+    "generateError": "Özel adres oluşturulurken hata oluştu",
+    "noAccount": "Aktif hesap bulunamadı. Yukarıdaki giriş düğmesini kullanın.",
+    "recentAliases": "Son özel Duck adresleri ({count}/{limit})",
+    "justNow": "Az önce",
+    "minutesAgo": "{n} dk önce",
+    "hoursAgo": "{n} sa önce",
+    "daysAgo": "{n} g önce"
+  },
+  "account": {
+    "title": "Hesap Yönetimi",
+    "logOut": "Çıkış Yap",
+    "addAccount": "+ Hesap Ekle",
+    "noAccounts": "Giriş yapılmış hesap bulunamadı.",
+    "idLabel": "ID"
+  },
+  "home": {
+    "title": "DDG E-posta Paneli",
+    "description": "DuckDuckGo Email Protection için açık kaynaklı resmi olmayan panel, Vercel'de yerel olarak dağıtıldı.",
+    "loginButton": "Giriş Yap",
+    "version": "Sürüm: {sha}"
+  },
+  "common": {
+    "login": "Giriş Yap"
+  }
+}

@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getCommitSha } from '@/core/env'
+import { useMessages } from '@/i18n/use-messages'
 
 export default function HomePage() {
   const router = useRouter()
+  const { t } = useMessages()
   const commitSha = getCommitSha()
   const [fading, setFading] = useState(false)
 
@@ -30,21 +32,21 @@ export default function HomePage() {
       className={`flex-1 flex flex-col items-center justify-center p-24 transition-opacity duration-300 ease-out ${fading ? 'opacity-0' : 'opacity-100'}`}
     >
       <div className="z-10 max-w-5xl w-full items-center justify-between text-sm flex flex-col gap-6 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-[var(--text-primary)]">DDG Email Panel</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-[var(--text-primary)]">{t('home.title')}</h1>
         <p className="text-[var(--text-secondary)] max-w-md">
-          Open source unofficial DuckDuckGo Email Protection panel, deployed natively on Vercel.
+          {t('home.description')}
         </p>
         <Link
           href="/login"
           className="mt-4 px-6 py-2.5 bg-ddg-orange hover:bg-ddg-orange-hover text-white font-semibold rounded-btn text-sm transition-colors"
         >
-          Login
+          {t('home.loginButton')}
         </Link>
         <div
           data-testid="version-info"
           className="mt-8 rounded-full border border-[var(--border-default)] px-4 py-1.5 text-xs text-[var(--text-secondary)] bg-[var(--bg-subtle)]"
         >
-          Version: {commitSha}
+          {t('home.version', { sha: commitSha })}
         </div>
       </div>
     </main>

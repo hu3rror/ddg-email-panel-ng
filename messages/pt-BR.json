@@ -1,0 +1,65 @@
+{
+  "nav": {
+    "title": "Painel de Email DDG",
+    "email": "E-mail",
+    "account": "Conta",
+    "about": "Sobre",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
+  },
+  "login": {
+    "title": "Digite seu endereço Duck",
+    "loginButton": "Entrar",
+    "tokenLogin": "Entrar com Access Token",
+    "addingBannerPrefix": "Você está conectado como ",
+    "addingBannerSuffix": ". Adicionar outra conta alternará para ela.",
+    "otpTitle": "Verifique sua caixa de entrada!",
+    "otpDescription": "Frase enviada para {email}",
+    "otpPlaceholder": "Digite a frase de uso único",
+    "otpContinue": "Continuar",
+    "otpVerifying": "Verificando...",
+    "otpBack": "Voltar",
+    "tokenTitle": "Entrar com Access Token",
+    "tokenDescription": "Digite seu endereço Duck e seu Access Token",
+    "tokenDuckPlaceholder": "Endereço Duck",
+    "tokenPlaceholder": "Digite seu Access Token",
+    "tokenLoggingIn": "Entrando...",
+    "tokenLoginButton": "Entrar",
+    "tokenBack": "Voltar ao login por nome de usuário",
+    "usernameLabel": "Digite seu endereço Duck",
+    "usernamePlaceholder": "Endereço Duck",
+    "usernameSending": "Enviando...",
+    "usernameLoginButton": "Entrar",
+    "usernameTokenLink": "Entrar com Access Token"
+  },
+  "email": {
+    "mainDuckAddress": "Endereço Duck principal",
+    "privateDuckAddress": "Endereço Duck privado",
+    "noAliasYet": "Nenhum alias gerado ainda",
+    "generateButton": "Gerar endereço Duck privado",
+    "generating": "Gerando...",
+    "generateError": "Erro ao gerar endereço privado",
+    "noAccount": "Nenhuma conta ativa encontrada. Use o botão de login acima.",
+    "recentAliases": "Endereços Duck privados recentes ({count}/{limit})",
+    "justNow": "Agora mesmo",
+    "minutesAgo": "{n} min atrás",
+    "hoursAgo": "{n} h atrás",
+    "daysAgo": "{n} d atrás"
+  },
+  "account": {
+    "title": "Gerenciamento de contas",
+    "logOut": "Sair",
+    "addAccount": "+ Adicionar conta",
+    "noAccounts": "Nenhuma conta conectada encontrada.",
+    "idLabel": "ID"
+  },
+  "home": {
+    "title": "Painel de Email DDG",
+    "description": "Painel não oficial de código aberto para DuckDuckGo Email Protection, implantado nativamente no Vercel.",
+    "loginButton": "Entrar",
+    "version": "Versão: {sha}"
+  },
+  "common": {
+    "login": "Entrar"
+  }
+}
