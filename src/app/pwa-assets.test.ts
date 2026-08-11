@@ -10,9 +10,15 @@ describe('PWA installability assets', () => {
     const config = manifest()
     expect(config.icons).toBeDefined()
     for (const icon of config.icons!) {
-      // icon.src 形如 '/icon-192.svg'，去掉前导斜杠解析为 public 目录下的文件
       const filePath = path.join(PUBLIC_DIR, icon.src.replace(/^\//, ''))
       expect(existsSync(filePath), `图标文件缺失: ${icon.src}`).toBe(true)
+    }
+  })
+
+  it('favicon 文件必须存在于 public/ 目录', () => {
+    const files = ['favicon.svg', 'favicon-32.png', 'favicon-16.png', 'apple-touch-icon.png']
+    for (const file of files) {
+      expect(existsSync(path.join(PUBLIC_DIR, file)), `图标文件缺失: ${file}`).toBe(true)
     }
   })
 
