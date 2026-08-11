@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { AccountSwitcher } from './account-switcher'
 import { ThemeToggle } from '@/components/theme-toggle'
 
+const GITHUB_URL = 'https://github.com/hu3rror/ddg-email-panel-ng'
+
 export function Nav() {
   return (
     <header className="w-full border-b border-[var(--border-default)] bg-[var(--bg-surface)]/50 backdrop-blur px-6 py-3">
@@ -21,6 +23,9 @@ export function Nav() {
             <Link href="/account" className="hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
               Account
             </Link>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
+              About
+            </a>
           </nav>
         </div>
 
