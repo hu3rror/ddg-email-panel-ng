@@ -1,8 +1,14 @@
 'use client'
 
 import { atomWithStorage } from 'jotai/utils'
-import type { SyncStorage } from 'jotai/vanilla/utils/atomWithStorage'
 import { routing, type Locale } from './routing'
+
+/** 与 jotai 的 SyncStorage 接口一致，内联定义以避免深层导入触发多实例检测。 */
+interface SyncStorage<Value> {
+  getItem: (key: string, initialValue: Value) => Value
+  setItem: (key: string, newValue: Value) => void
+  removeItem: (key: string) => void
+}
 
 /**
  * 将一组浏览器语言代码（按偏好排序）匹配到最接近的 locale。
