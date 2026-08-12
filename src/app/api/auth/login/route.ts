@@ -50,7 +50,9 @@ export async function POST(req: Request) {
       {
         access_token: userData.access_token || tempToken,
         username: userData.username || username,
-        email: userData.email || '',
+        // 注意：上游 dashboard 的 email 字段是真实转发邮箱，而非 Duck Address
+        // 此处始终使用 Duck Address 作为展示用的 email
+        email: `${userData.username || username}@duck.com`,
         cohort: userData.cohort || '',
       },
       { status: 200 }
