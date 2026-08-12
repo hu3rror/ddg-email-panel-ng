@@ -51,7 +51,8 @@
     "logOut": "Sair",
     "addAccount": "+ Adicionar conta",
     "noAccounts": "Nenhuma conta conectada encontrada.",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "Alternar para {email}"
   },
   "home": {
     "title": "Painel de Email DDG",

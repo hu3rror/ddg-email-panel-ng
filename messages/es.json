@@ -51,7 +51,8 @@
     "logOut": "Cerrar sesión",
     "addAccount": "+ Añadir cuenta",
     "noAccounts": "No se encontraron cuentas conectadas.",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "Cambiar a {email}"
   },
   "home": {
     "title": "Panel de correo DDG",

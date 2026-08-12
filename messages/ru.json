@@ -51,7 +51,8 @@
     "logOut": "Выйти",
     "addAccount": "+ Добавить аккаунт",
     "noAccounts": "Аккаунты не найдены.",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "Переключиться на {email}"
   },
   "home": {
     "title": "Панель DDG Email",

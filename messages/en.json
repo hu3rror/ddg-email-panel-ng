@@ -51,7 +51,8 @@
     "logOut": "Log Out",
     "addAccount": "+ Add Account",
     "noAccounts": "No logged-in accounts found.",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "Switch to {email}"
   },
   "home": {
     "title": "DDG Email Panel",

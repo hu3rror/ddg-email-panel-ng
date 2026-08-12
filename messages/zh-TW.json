@@ -51,7 +51,8 @@
     "logOut": "登出",
     "addAccount": "+ 新增帳戶",
     "noAccounts": "沒有已登入的帳戶。",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "切換到 {email}"
   },
   "home": {
     "title": "DDG 郵箱面板",

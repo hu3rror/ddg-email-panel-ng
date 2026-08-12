@@ -51,7 +51,8 @@
     "logOut": "Çıkış Yap",
     "addAccount": "+ Hesap Ekle",
     "noAccounts": "Giriş yapılmış hesap bulunamadı.",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "{email} adresine geç"
   },
   "home": {
     "title": "DDG E-posta Paneli",

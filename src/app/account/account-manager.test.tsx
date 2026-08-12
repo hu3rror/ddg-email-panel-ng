@@ -1,13 +1,29 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { createStore, Provider } from 'jotai'
 import { AccountManager } from './account-manager'
-import { addAccountHelper, accountsAtom } from '@/core/store/account'
+import { addAccountHelper, accountsAtom, activeAccountIdAtom } from '@/core/store/account'
+
+const { mockPush } = vi.hoisted(() => ({
+  mockPush: vi.fn(),
+}))
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+    back: vi.fn(),
+  }),
+  useSearchParams: () => new URLSearchParams(),
+}))
 
 describe('AccountManager Component', () => {
   beforeEach(() => {
     localStorage.clear()
+    mockPush.mockClear()
   })
+
   it('渲染已登录账号列表，点击注销按钮可精准移除 UUID 账号', () => {
     const store = createStore()
     addAccountHelper(store, {
@@ -28,6 +44,33 @@ describe('AccountManager Component', () => {
     fireEvent.click(removeBtn)
 
     expect(store.get(accountsAtom)).toHaveLength(0)
+  })
+
+  it('点击邮箱按钮应切换活跃账号并跳转到 /email', () => {
+    const store = createStore()
+    const acc1 = addAccountHelper(store, {
+      username: 'duck1',
+      email: 'duck1@duck.com',
+      access_token: 'tok1',
+    })
+    addAccountHelper(store, {
+      username: 'duck2',
+      email: 'duck2@duck.com',
+      access_token: 'tok2',
+    })
+
+    render(
+      <Provider store={store}>
+        <AccountManager />
+      </Provider>
+    )
+
+    // 当前活跃账号是 acc2（最后添加的），点击 acc1 的邮箱
+    const emailBtn = screen.getByRole('button', { name: /Switch to duck1@duck\.com/i })
+    fireEvent.click(emailBtn)
+
+    expect(store.get(activeAccountIdAtom)).toBe(acc1.id)
+    expect(mockPush).toHaveBeenCalledWith('/email')
   })
 
   it('有账号时应显示 + Add Account 按钮', () => {

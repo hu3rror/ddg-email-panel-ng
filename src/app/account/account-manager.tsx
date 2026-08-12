@@ -60,8 +60,18 @@ export function AccountManager() {
             key={acc.id}
             className="flex items-center justify-between p-3 border border-[var(--border-default)] rounded-card bg-[var(--bg-subtle)]"
           >
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-[var(--text-primary)]">{acc.email || `${acc.username}@duck.com`}</span>
+            <div className="flex flex-col min-w-0">
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveAccountId(acc.id)
+                  router.push('/email')
+                }}
+                aria-label={t('account.switchToEmail', { email: acc.email || `${acc.username}@duck.com` })}
+                className="text-sm font-medium text-[var(--text-primary)] hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors text-left truncate cursor-pointer"
+              >
+                {acc.email || `${acc.username}@duck.com`}
+              </button>
               <span className="text-xs text-[var(--text-muted)]">{t('account.idLabel')}: {acc.id.slice(0, 8)}...</span>
             </div>
 

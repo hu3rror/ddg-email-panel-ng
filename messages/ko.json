@@ -51,7 +51,8 @@
     "logOut": "로그아웃",
     "addAccount": "+ 계정 추가",
     "noAccounts": "로그인된 계정이 없습니다.",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "{email}(으)로 전환"
   },
   "home": {
     "title": "DDG 이메일 패널",

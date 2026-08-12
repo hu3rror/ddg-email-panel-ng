@@ -51,7 +51,8 @@
     "logOut": "退出登录",
     "addAccount": "+ 添加账户",
     "noAccounts": "没有已登录的账户。",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "切换到 {email}"
   },
   "home": {
     "title": "DDG 邮箱面板",

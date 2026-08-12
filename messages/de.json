@@ -51,7 +51,8 @@
     "logOut": "Abmelden",
     "addAccount": "+ Konto hinzufügen",
     "noAccounts": "Keine angemeldeten Konten gefunden.",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "Zu {email} wechseln"
   },
   "home": {
     "title": "DDG E-Mail-Panel",

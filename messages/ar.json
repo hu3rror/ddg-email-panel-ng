@@ -51,7 +51,8 @@
     "logOut": "تسجيل الخروج",
     "addAccount": "+ إضافة حساب",
     "noAccounts": "لم يتم العثور على حسابات مسجلة الدخول.",
-    "idLabel": "المعرف"
+    "idLabel": "المعرف",
+    "switchToEmail": "التبديل إلى {email}"
   },
   "home": {
     "title": "لوحة بريد DDG",

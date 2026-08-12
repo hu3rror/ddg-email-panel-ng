@@ -51,7 +51,8 @@
     "logOut": "ログアウト",
     "addAccount": "+ アカウントを追加",
     "noAccounts": "ログイン済みのアカウントはありません。",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "{email} に切り替え"
   },
   "home": {
     "title": "DDG メール面板",

@@ -51,7 +51,8 @@
     "logOut": "Esci",
     "addAccount": "+ Aggiungi account",
     "noAccounts": "Nessun account connesso trovato.",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "Passa a {email}"
   },
   "home": {
     "title": "Pannello Email DDG",

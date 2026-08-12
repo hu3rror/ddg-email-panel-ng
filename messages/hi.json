@@ -51,7 +51,8 @@
     "logOut": "लॉग आउट",
     "addAccount": "+ खाता जोड़ें",
     "noAccounts": "कोई लॉग इन खाता नहीं मिला।",
-    "idLabel": "ID"
+    "idLabel": "ID",
+    "switchToEmail": "{email} पर स्विच करें"
   },
   "home": {
     "title": "DDG ईमेल पैनल",

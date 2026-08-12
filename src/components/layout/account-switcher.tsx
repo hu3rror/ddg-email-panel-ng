@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useAtom, useAtomValue } from 'jotai'
 import { accountsAtom, activeAccountIdAtom } from '@/core/store/account'
 import { useHydrated } from '@/core/hooks/use-hydrated'
@@ -10,6 +10,7 @@ import { useMessages } from '@/i18n/use-messages'
 
 export function AccountSwitcher() {
   const router = useRouter()
+  const pathname = usePathname()
   const hydrated = useHydrated()
   const { t } = useMessages()
   const accounts = useAtomValue(accountsAtom)
@@ -41,7 +42,11 @@ export function AccountSwitcher() {
       router.push('/login?next=/account')
       return
     }
-    setActiveAccountId(e.target.value)
+    const id = e.target.value
+    setActiveAccountId(id)
+    if (pathname !== '/email') {
+      router.push('/email')
+    }
   }
 
   return (
