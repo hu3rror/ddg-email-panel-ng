@@ -55,6 +55,19 @@ pnpm dev
 | PWA | Service Worker + manifest |
 | 包管理器 | pnpm |
 
+## 如何获取 Duck 邮箱和 Access Token
+
+由于 DuckDuckGo 会对来自服务器 IP（如 Vercel）的注册和 OTP 登录请求触发人机验证，您需要先通过官方渠道完成注册并获取 Access Token。
+
+1. **安装官方扩展。** DuckDuckGo 限制了注册页面的访问权限。在开始之前，您必须先安装官方的 **DuckDuckGo 浏览器扩展**（支持 Chrome, Firefox, Edge, Safari）或使用 **DuckDuckGo 隐私浏览器**（移动端或 Mac/Windows 客户端）。
+2. **通过官方注册。** 启用扩展或浏览器后，访问 [duckduckgo.com/email](https://duckduckgo.com/email)，按照页面指引创建您的主 `@duck.com` 邮箱。
+3. **获取 Access Token。**
+   - 注册完成后，在当前浏览器页面按下 `F12` 打开开发者工具。
+   - 切换到 **Application（应用）** 或 **Storage（存储）** 选项卡。
+   - 在左侧展开 **Local Storage（本地存储）**，点击 `https://duckduckgo.com`。
+   - 找到名为 `user` 的键，复制其值，或者提取其中 `"access_token"` 对应的字符串（形如 `hkbidcezaw...`）。
+4. **导入面板。** 将该 Access Token 填入您部署的面板中，即可完美绕过验证码限制，开始管理您的邮箱别名。
+
 ## 术语表
 
 常用术语：

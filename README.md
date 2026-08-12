@@ -55,6 +55,19 @@ Open [http://localhost:3000](http://localhost:3000).
 | PWA | Service worker + manifest |
 | Package manager | pnpm |
 
+## How to Get a Duck Address & Access Token
+
+Since DuckDuckGo limits registration and OTP login when requests originate from server IPs (e.g., Vercel), you must register your primary address officially and retrieve your Access Token beforehand.
+
+1. **Install the official extension.** DuckDuckGo restricts access to the signup page. You must first install the official **DuckDuckGo Browser Extension** (available for Chrome, Firefox, Edge, Safari) or use the **DuckDuckGo Private Browser** (on mobile or Mac/Windows).
+2. **Sign up officially.** With the extension active, navigate to [duckduckgo.com/email](https://duckduckgo.com/email) and follow the on-screen prompts to set up your primary `@duck.com` address.
+3. **Retrieve your Access Token.**
+   - Open your browser's Developer Tools (`F12` or `Ctrl+Shift+I` / `Cmd+Option+I`).
+   - Go to the **Application** (or **Storage**) tab.
+   - Expand **Local Storage** on the left and select `https://duckduckgo.com`.
+   - Locate the key named `user`. Copy the value inside, or extract the `"access_token"` string (e.g., `hkbidcezaw...`).
+4. **Log in to the panel.** Paste this Access Token into your deployed instance to bypass all captcha limitations and start managing your aliases.
+
 ## Domain glossary
 
 Key terms:
