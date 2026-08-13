@@ -10,7 +10,7 @@ import {
   ALIAS_HISTORY_LIMIT,
 } from '@/core/store/account'
 import { CopyButton } from '@/components/copy-button'
-import { useHydrated } from '@/core/hooks/use-hydrated'
+import { HydrationBoundary } from '@/components/hydration-boundary'
 import { useMessages } from '@/i18n/use-messages'
 import { ShieldCheck, ChevronDown, ChevronRight } from 'lucide-react'
 
@@ -93,7 +93,6 @@ function AliasHistoryPanel({
 
 export function EmailDashboard() {
   const { t } = useMessages()
-  const hydrated = useHydrated()
   const activeAccount = useAtomValue(activeAccountAtom)
   const setAccounts = useSetAtom(accountsAtom)
 
@@ -104,34 +103,11 @@ export function EmailDashboard() {
 
   // 迁移：已有 nextAlias 但无 aliasHistory 的账户自动回填
   useEffect(() => {
-    if (hydrated && !backfilled.current) {
+    if (activeAccount && !backfilled.current) {
       backfilled.current = true
       setAccounts(backfillAliasHistory)
     }
-  }, [hydrated, setAccounts])
-
-  if (!hydrated) {
-    return (
-      <div
-        data-testid="dashboard-skeleton"
-        className="flex flex-col gap-6 max-w-md w-full mx-auto p-6 animate-pulse"
-      >
-        <div className="h-4 bg-[var(--bg-subtle)] rounded w-1/3" />
-        <div className="h-12 bg-[var(--bg-subtle)] rounded-card" />
-        <div className="h-4 bg-[var(--bg-subtle)] rounded w-1/3" />
-        <div className="h-12 bg-[var(--bg-subtle)] rounded-card" />
-        <div className="h-10 bg-[var(--bg-subtle)] rounded-btn mt-2" />
-      </div>
-    )
-  }
-
-  if (!activeAccount) {
-    return (
-      <div className="text-center p-8 text-[var(--text-secondary)]">
-        {t('email.noAccount')}
-      </div>
-    )
-  }
+  }, [activeAccount, setAccounts])
 
   const handleGenerateAlias = async () => {
     setLoading(true)
@@ -166,64 +142,114 @@ export function EmailDashboard() {
     }
   }
 
+  return (
+    <HydrationBoundary
+      fallback={
+        <div
+          data-testid="dashboard-skeleton"
+          className="flex flex-col gap-6 max-w-md w-full mx-auto p-6 animate-pulse"
+        >
+          <div className="h-4 bg-[var(--bg-subtle)] rounded w-1/3" />
+          <div className="h-12 bg-[var(--bg-subtle)] rounded-card" />
+          <div className="h-4 bg-[var(--bg-subtle)] rounded w-1/3" />
+          <div className="h-12 bg-[var(--bg-subtle)] rounded-card" />
+          <div className="h-10 bg-[var(--bg-subtle)] rounded-btn mt-2" />
+        </div>
+      }
+    >
+      {!activeAccount ? (
+        <div className="text-center p-8 text-[var(--text-secondary)]">
+          {t('email.noAccount')}
+        </div>
+      ) : (
+        <DashboardContent
+          activeAccount={activeAccount}
+          t={t}
+          loading={loading}
+          errorMsg={errorMsg}
+          historyOpen={historyOpen}
+          onGenerate={handleGenerateAlias}
+          onToggleHistory={() => setHistoryOpen((v) => !v)}
+        />
+      )}
+    </HydrationBoundary>
+  )
+}
+
+function DashboardContent({
+  activeAccount,
+  t,
+  loading,
+  errorMsg,
+  historyOpen,
+  onGenerate,
+  onToggleHistory,
+}: {
+  activeAccount: NonNullable<ReturnType<typeof useAtomValue<typeof activeAccountAtom>>>
+  t: ReturnType<typeof useMessages>['t']
+  loading: boolean
+  errorMsg: string
+  historyOpen: boolean
+  onGenerate: () => Promise<void>
+  onToggleHistory: () => void
+}) {
   const mainDuckAddress = `${activeAccount.username}@duck.com`
   const privateDuckAddress = activeAccount.nextAlias
     ? `${activeAccount.nextAlias}@duck.com`
     : ''
-  const historyCount = activeAccount.aliasHistory?.length ?? 0
 
   return (
     <div className="flex flex-col gap-6 max-w-md w-full mx-auto p-6 border border-[var(--border-default)] rounded-card bg-[var(--bg-surface)] shadow-sm">
       {/* 主 Duck 地址 */}
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-semibold text-[var(--text-secondary)]">
-          {t('email.mainDuckAddress')}
-        </span>
-        <div className="flex items-center justify-between gap-4 p-3 rounded-card bg-[var(--bg-subtle)]">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--duck-pill-bg)] text-[var(--duck-pill-text)] text-base font-medium">
-            {mainDuckAddress}
-          </span>
-          <CopyButton text={mainDuckAddress} />
-        </div>
-      </div>
-
-      <hr className="border-[var(--border-default)]" />
-
-      {/* 私密 Duck 地址 */}
-      <div className="flex flex-col gap-2">
-        <span className="text-xs font-semibold text-[var(--text-secondary)]">
-          {t('email.privateDuckAddress')}
-        </span>
-        <div className="flex items-center justify-between gap-4 p-3 rounded-card bg-[var(--bg-subtle)]">
-          {privateDuckAddress ? (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--duck-pill-bg)] text-[var(--duck-pill-text)] text-base font-medium">
-              <ShieldCheck size={16} className="text-ddg-green dark:text-ddg-green-dark" />
-              {privateDuckAddress}
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-semibold text-[var(--text-secondary)]">
+              {t('email.mainDuckAddress')}
             </span>
-          ) : (
-            <span className="text-sm italic text-[var(--text-muted)]">{t('email.noAliasYet')}</span>
-          )}
-          <CopyButton text={privateDuckAddress} disabled={!privateDuckAddress} />
+            <div className="flex items-center justify-between gap-4 p-3 rounded-card bg-[var(--bg-subtle)]">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--duck-pill-bg)] text-[var(--duck-pill-text)] text-base font-medium">
+                {mainDuckAddress}
+              </span>
+              <CopyButton text={mainDuckAddress} />
+            </div>
+          </div>
+
+          <hr className="border-[var(--border-default)]" />
+
+          {/* 私密 Duck 地址 */}
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-semibold text-[var(--text-secondary)]">
+              {t('email.privateDuckAddress')}
+            </span>
+            <div className="flex items-center justify-between gap-4 p-3 rounded-card bg-[var(--bg-subtle)]">
+              {privateDuckAddress ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--duck-pill-bg)] text-[var(--duck-pill-text)] text-base font-medium">
+                  <ShieldCheck size={16} className="text-ddg-green dark:text-ddg-green-dark" />
+                  {privateDuckAddress}
+                </span>
+              ) : (
+                <span className="text-sm italic text-[var(--text-muted)]">{t('email.noAliasYet')}</span>
+              )}
+              <CopyButton text={privateDuckAddress} disabled={!privateDuckAddress} />
+            </div>
+          </div>
+
+          {errorMsg && <p className="text-xs text-ddg-orange">{errorMsg}</p>}
+
+          <button
+            type="button"
+            onClick={onGenerate}
+            disabled={loading}
+            className="w-full py-2.5 bg-ddg-orange hover:bg-ddg-orange-hover text-white font-semibold rounded-btn text-sm disabled:opacity-50 transition-colors mt-2"
+          >
+            {loading ? t('email.generating') : t('email.generateButton')}
+          </button>
+
+          {/* 别名历史折叠面板 */}
+          <AliasHistoryPanel
+            history={activeAccount.aliasHistory}
+            open={historyOpen}
+            onToggle={onToggleHistory}
+          />
         </div>
-      </div>
-
-      {errorMsg && <p className="text-xs text-ddg-orange">{errorMsg}</p>}
-
-      <button
-        type="button"
-        onClick={handleGenerateAlias}
-        disabled={loading}
-        className="w-full py-2.5 bg-ddg-orange hover:bg-ddg-orange-hover text-white font-semibold rounded-btn text-sm disabled:opacity-50 transition-colors mt-2"
-      >
-        {loading ? t('email.generating') : t('email.generateButton')}
-      </button>
-
-      {/* 别名历史折叠面板 */}
-      <AliasHistoryPanel
-        history={activeAccount.aliasHistory}
-        open={historyOpen}
-        onToggle={() => setHistoryOpen((v) => !v)}
-      />
-    </div>
-  )
+      )
 }
