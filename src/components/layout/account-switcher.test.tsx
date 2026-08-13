@@ -153,8 +153,8 @@ describe('AccountSwitcher Component', () => {
       </Provider>
     )
 
-    const select = screen.getByRole('combobox')
-    const options = Array.from(select.options).map((o) => o.value)
+    const select = screen.getByRole('combobox') as HTMLSelectElement
+    const options = Array.from(select.options).map((o) => (o as HTMLOptionElement).value)
     expect(options).toContain('__add__')
     expect(screen.getByText('+ Add Account')).toBeInTheDocument()
   })
