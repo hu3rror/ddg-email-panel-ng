@@ -11,17 +11,19 @@ export async function POST(req: Request) {
     }
 
     const token = authHeader.replace('Bearer ', '').trim()
-    const upstreamRes = await generateAddresses(token)
+    const result = await generateAddresses(token)
 
-    if (upstreamRes.ok) {
-      const data = await upstreamRes.json()
-      return NextResponse.json(data, { status: 200 })
+    if (!result.ok) {
+      if (result.error.type === 'network_error') {
+        return NextResponse.json({ message: 'Upstream unavailable' }, { status: 502 })
+      }
+      return NextResponse.json(
+        { message: result.error.message },
+        { status: result.error.status }
+      )
     }
 
-    return NextResponse.json(
-      { message: upstreamRes.statusText || 'Failed to generate address' },
-      { status: upstreamRes.status }
-    )
+    return NextResponse.json(result.data, { status: 200 })
   } catch (err) {
     console.error('Error in /api/alias/generate:', err)
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 })

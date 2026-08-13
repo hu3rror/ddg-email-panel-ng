@@ -7,59 +7,39 @@ export const runtime = 'edge'
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const parseResult = requestOtpSchema.safeParse(body)
-
-    if (!parseResult.success) {
+    const parsed = requestOtpSchema.safeParse(body)
+    if (!parsed.success) {
       return NextResponse.json(
-        { message: parseResult.error.issues[0].message },
+        { message: parsed.error.issues[0].message },
         { status: 400 }
       )
     }
 
-    const { username } = parseResult.data
-    const upstreamRes = await requestLoginLink(username)
-
-    if (upstreamRes.ok) {
-      return NextResponse.json({ message: 'success' }, { status: 200 })
-    }
-
-    // 尝试解析上游错误体，特别是 DDG 的 reCAPTCHA 挑战响应
-    let upstreamError: Record<string, unknown> = {}
-    try {
-      upstreamError = (await upstreamRes.json()) as Record<string, unknown>
-    } catch {
-      // 忽略解析失败
-    }
-
-    // 处理 DDG 的 reCAPTCHA 挑战响应：{ error: "rc", c: { ar, cp, flow, error } }
-    if (upstreamError.error === 'rc') {
-      const challengeInfo = upstreamError.c as
-        | { ar?: number; cp?: string; flow?: string; error?: boolean }
-        | undefined
-
+    const result = await requestLoginLink(parsed.data.username)
+    if (!result.ok) {
+      if (result.error.type === 'rc_challenge') {
+        return NextResponse.json(
+          {
+            message:
+              'A security challenge is required to send the OTP. This is expected when the request originates from a server IP. ' +
+              'Please try again later, or use Access Token login instead.',
+            error: 'rc',
+            retryable: true,
+            challenge: result.error.challenge,
+          },
+          { status: 429 }
+        )
+      }
+      if (result.error.type === 'network_error') {
+        return NextResponse.json({ message: 'Upstream unavailable' }, { status: 502 })
+      }
       return NextResponse.json(
-        {
-          message:
-            'A security challenge is required to send the OTP. This is expected when the request originates from a server IP. ' +
-            'Please try again later, or use Access Token login instead.',
-          error: 'rc',
-          retryable: true,
-          challenge: challengeInfo
-            ? {
-                ar: challengeInfo.ar,
-                cp: challengeInfo.cp,
-                flow: challengeInfo.flow,
-              }
-            : undefined,
-        },
-        { status: 429 }
+        { message: result.error.message },
+        { status: result.error.status }
       )
     }
 
-    return NextResponse.json(
-      { message: upstreamRes.statusText || 'Upstream Error' },
-      { status: upstreamRes.status }
-    )
+    return NextResponse.json({ message: 'success' }, { status: 200 })
   } catch (err) {
     console.error('Error in /api/auth/loginlink:', err)
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 })

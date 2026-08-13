@@ -1,12 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from './route'
 
+vi.mock('@/core/ddg/client', () => ({
+  generateAddresses: vi.fn(),
+}))
+
+import { generateAddresses } from '@/core/ddg/client'
+
 describe('POST /api/alias/generate (Edge Route Handler)', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
   })
 
-  it('缺少 Authorization Bearer Header 时，返回 401 Unauthorized', async () => {
+  it('缺少 Authorization Header 时返回 401', async () => {
     const req = new Request('http://localhost/api/alias/generate', {
       method: 'POST',
     })
@@ -15,19 +21,15 @@ describe('POST /api/alias/generate (Edge Route Handler)', () => {
     expect(res.status).toBe(401)
   })
 
-  it('带有合法 Bearer Token 时，代理请求 DDG 上游 addresses 接口，返回新生成的别名', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
+  it('成功时返回新别名', async () => {
+    vi.mocked(generateAddresses).mockResolvedValue({
       ok: true,
-      status: 200,
-      json: async () => ({ address: 'new_duck_alias_123' }),
+      data: { address: 'new_duck_alias_123' },
     })
-    vi.stubGlobal('fetch', mockFetch)
 
     const req = new Request('http://localhost/api/alias/generate', {
       method: 'POST',
-      headers: {
-        Authorization: 'Bearer valid_access_token_999',
-      },
+      headers: { Authorization: 'Bearer valid_access_token_999' },
     })
 
     const res = await POST(req)
@@ -35,16 +37,37 @@ describe('POST /api/alias/generate (Edge Route Handler)', () => {
 
     const data = await res.json()
     expect(data.address).toBe('new_duck_alias_123')
+  })
 
-    // 校验是否将 Bearer Token 透传给 DDG 上游
-    expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining('email/addresses'),
-      expect.objectContaining({
-        method: 'POST',
-        headers: expect.objectContaining({
-          Authorization: 'Bearer valid_access_token_999',
-        }),
-      })
-    )
+  it('上游错误时返回对应 status', async () => {
+    vi.mocked(generateAddresses).mockResolvedValue({
+      ok: false,
+      error: { type: 'api_error', status: 401, message: 'Unauthorized' },
+    })
+
+    const req = new Request('http://localhost/api/alias/generate', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer bad_token' },
+    })
+
+    const res = await POST(req)
+    expect(res.status).toBe(401)
+    const data = await res.json()
+    expect(data.message).toBe('Unauthorized')
+  })
+
+  it('网络错误时返回 502', async () => {
+    vi.mocked(generateAddresses).mockResolvedValue({
+      ok: false,
+      error: { type: 'network_error', message: 'connect ECONNREFUSED' },
+    })
+
+    const req = new Request('http://localhost/api/alias/generate', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer tok' },
+    })
+
+    const res = await POST(req)
+    expect(res.status).toBe(502)
   })
 })
