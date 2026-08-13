@@ -6,8 +6,8 @@ Open source, unofficial panel for DuckDuckGo Email Protection. Deployed natively
 
 [中文](./README_zh-CN.md)
 
+<img width="1673" height="999" alt="image" src="https://github.com/user-attachments/assets/3e5eb4a7-dedf-4386-8184-5b0ccd22506e" />
 <img width="1673" height="999" alt="image" src="https://github.com/user-attachments/assets/bb1afb77-7b16-438d-a0dc-63680516f586" />
-
 
 ## Features
 
