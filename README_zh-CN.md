@@ -6,6 +6,7 @@
 
 [English](./README.md)
 
+<img width="1673" height="999" alt="image" src="https://github.com/user-attachments/assets/5469ff08-e1b6-4bd7-a036-80b467270ff9" />
 <img width="1673" height="999" alt="image" src="https://github.com/user-attachments/assets/e650a25c-9fa6-4211-afd7-a9b189ba64ed" />
 
 ## 功能
