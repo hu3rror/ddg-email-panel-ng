@@ -6,6 +6,8 @@
 
 [English](./README.md)
 
+<img width="1673" height="999" alt="image" src="https://github.com/user-attachments/assets/e650a25c-9fa6-4211-afd7-a9b189ba64ed" />
+
 ## 功能
 
 - **多账户管理。** 添加多个 Duck 邮箱地址，自由切换，集中管理。
