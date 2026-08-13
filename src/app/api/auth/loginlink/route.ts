@@ -17,26 +17,27 @@ export async function POST(req: Request) {
 
     const result = await requestLoginLink(parsed.data.username)
     if (!result.ok) {
-      if (result.error.type === 'rc_challenge') {
-        return NextResponse.json(
-          {
-            message:
-              'A security challenge is required to send the OTP. This is expected when the request originates from a server IP. ' +
-              'Please try again later, or use Access Token login instead.',
-            error: 'rc',
-            retryable: true,
-            challenge: result.error.challenge,
-          },
-          { status: 429 }
-        )
+      const err = result.error
+      switch (err.type) {
+        case 'rc_challenge':
+          return NextResponse.json(
+            {
+              message:
+                'A security challenge is required to send the OTP. This is expected when the request originates from a server IP. ' +
+                'Please try again later, or use Access Token login instead.',
+              error: 'rc',
+              retryable: true,
+              challenge: err.challenge,
+            },
+            { status: 429 }
+          )
+        case 'network_error':
+          return NextResponse.json({ message: 'Upstream unavailable' }, { status: 502 })
+        case 'api_error':
+          return NextResponse.json({ message: err.message }, { status: err.status })
+        case 'parse_error':
+          return NextResponse.json({ message: err.message }, { status: 500 })
       }
-      if (result.error.type === 'network_error') {
-        return NextResponse.json({ message: 'Upstream unavailable' }, { status: 502 })
-      }
-      return NextResponse.json(
-        { message: result.error.message },
-        { status: result.error.status }
-      )
     }
 
     return NextResponse.json({ message: 'success' }, { status: 200 })

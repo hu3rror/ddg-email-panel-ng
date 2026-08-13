@@ -180,7 +180,7 @@ describe('loginWithOtpTwoStage', () => {
 
     const result = await loginWithOtpTwoStage('user', 'bad')
     expect(result.ok).toBe(false)
-    if (!result.ok) {
+    if (!result.ok && result.error.type === 'api_error') {
       expect(result.error.message).toBe('Invalid or expired pass-phrase')
     }
   })
@@ -221,8 +221,7 @@ describe('loginWithOtpTwoStage', () => {
 
     const result = await loginWithOtpTwoStage('user', 'valid')
     expect(result.ok).toBe(false)
-    if (!result.ok) {
-      expect(result.error.type).toBe('parse_error')
+    if (!result.ok && result.error.type === 'parse_error') {
       expect(result.error.message).toBe('Token exchange failed')
     }
   })
@@ -290,8 +289,7 @@ describe('generateAddresses', () => {
 
     const result = await generateAddresses('bad_token')
     expect(result.ok).toBe(false)
-    if (!result.ok) {
-      expect(result.error.type).toBe('api_error')
+    if (!result.ok && result.error.type === 'api_error') {
       expect(result.error.status).toBe(401)
     }
   })

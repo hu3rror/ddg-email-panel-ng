@@ -14,13 +14,17 @@ export async function POST(req: Request) {
     const result = await generateAddresses(token)
 
     if (!result.ok) {
-      if (result.error.type === 'network_error') {
-        return NextResponse.json({ message: 'Upstream unavailable' }, { status: 502 })
+      const err = result.error
+      switch (err.type) {
+        case 'network_error':
+          return NextResponse.json({ message: 'Upstream unavailable' }, { status: 502 })
+        case 'api_error':
+          return NextResponse.json({ message: err.message }, { status: err.status })
+        case 'rc_challenge':
+          return NextResponse.json({ message: 'Authentication failed' }, { status: 401 })
+        case 'parse_error':
+          return NextResponse.json({ message: err.message }, { status: 500 })
       }
-      return NextResponse.json(
-        { message: result.error.message },
-        { status: result.error.status }
-      )
     }
 
     return NextResponse.json(result.data, { status: 200 })
