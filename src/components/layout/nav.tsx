@@ -3,25 +3,39 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { Mail, User, Github, Menu, X } from 'lucide-react'
+import { useAtomValue } from 'jotai'
+import { accountsAtom } from '@/core/store/account'
 import { AccountSwitcher } from './account-switcher'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { LocaleSwitcher } from './locale-switcher'
 import { useMessages } from '@/i18n/use-messages'
+import { HydrationBoundary } from '@/components/hydration-boundary'
 
 const GITHUB_URL = 'https://github.com/hu3rror/ddg-email-panel-ng'
 
 export function Nav() {
   const [open, setOpen] = useState(false)
   const { t } = useMessages()
+  const accounts = useAtomValue(accountsAtom)
+  const hasAccounts = accounts.length > 0
 
   return (
     <header className="w-full border-b border-[var(--border-default)] bg-[var(--bg-surface)]/50 backdrop-blur">
       <div className="nav-container flex items-center justify-between gap-4 px-6 py-3">
         <div className="flex items-center gap-6 sm:gap-10">
-          <Link href="/email" className="flex items-center gap-2 font-bold text-lg tracking-tight text-[var(--text-primary)] whitespace-nowrap">
+          <HydrationBoundary
+            fallback={
+              <span className="flex items-center gap-2 font-bold text-lg tracking-tight text-[var(--text-primary)] whitespace-nowrap">
+                <img src="/favicon.svg" alt="" className="w-6 h-6 rounded" />
+                {t('nav.title')}
+              </span>
+            }
+          >
+          <Link href={hasAccounts ? '/email' : '/'} className="flex items-center gap-2 font-bold text-lg tracking-tight text-[var(--text-primary)] whitespace-nowrap">
             <img src="/favicon.svg" alt="" className="w-6 h-6 rounded" />
             {t('nav.title')}
           </Link>
+          </HydrationBoundary>
 
           <nav className="hidden sm:flex items-center gap-6 text-sm font-medium text-[var(--text-secondary)]">
             <Link href="/email" className="flex items-center gap-1.5 hover:text-ddg-blue dark:hover:text-ddg-blue-dark transition-colors">
