@@ -5,6 +5,14 @@ import { Provider, createStore } from 'jotai'
 import { accountsAtom, activeAccountIdAtom } from '@/core/store/account'
 import { useAuth } from './use-auth'
 
+vi.mock('@/core/auth', () => ({
+  sendOtp: vi.fn(),
+  verifyOtp: vi.fn(),
+  loginWithToken: vi.fn(),
+}))
+
+import { sendOtp as coreSendOtp, verifyOtp as coreVerifyOtp, loginWithToken as coreLoginWithToken } from '@/core/auth'
+
 /** 测试辅助组件：调用 useAuth 并将状态暴露到 DOM 中 */
 function AuthTestHarness({ username, otp, token, action }: {
   username?: string
@@ -56,12 +64,8 @@ describe('useAuth hook', () => {
     vi.restoreAllMocks()
   })
 
-  it('sendOtp: 成功发送 OTP 时返回 true，状态恢复 idle', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ message: 'success' }),
-    }))
+  it('sendOtp: 核心模块成功时返回 true，状态恢复 idle', async () => {
+    vi.mocked(coreSendOtp).mockResolvedValue({ success: true })
 
     const store = createTestStore()
     render(
@@ -76,16 +80,13 @@ describe('useAuth hook', () => {
     expect(screen.getByTestId('status').textContent).toBe('idle')
   })
 
-  it('sendOtp: 重复账号时不发送请求，返回 false 并设置错误', async () => {
+  it('sendOtp: 核心模块失败时返回 false，设置错误和 status', async () => {
+    vi.mocked(coreSendOtp).mockResolvedValue({
+      success: false,
+      error: 'Account testuser@duck.com is already in your list.',
+    })
+
     const store = createTestStore()
-    // 预置一个同名账号
-    store.set(accountsAtom, [
-      { id: 'existing-id', username: 'testuser', email: 'testuser@duck.com', access_token: 'tok' },
-    ])
-
-    const fetchMock = vi.fn()
-    vi.stubGlobal('fetch', fetchMock)
-
     render(
       <Provider store={store}>
         <AuthTestHarness username="testuser" action="sendOtp" />
@@ -97,60 +98,13 @@ describe('useAuth hook', () => {
     })
     expect(screen.getByTestId('status').textContent).toBe('error')
     expect(screen.getByTestId('error').textContent).toContain('already in your list')
-    // 不应调用 fetch
-    expect(fetchMock).not.toHaveBeenCalled()
   })
 
-  it('sendOtp: API 返回错误时返回 false 并设置错误信息', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: async () => ({ message: 'Upstream error' }),
-    }))
-
-    const store = createTestStore()
-    render(
-      <Provider store={store}>
-        <AuthTestHarness username="testuser" action="sendOtp" />
-      </Provider>
-    )
-
-    await waitFor(() => {
-      expect(screen.getByTestId('result').textContent).toBe('false')
+  it('verifyOtp: 成功时写入 store 并返回 true', async () => {
+    vi.mocked(coreVerifyOtp).mockResolvedValue({
+      success: true,
+      account: { username: 'otpuser', email: 'otpuser@duck.com', access_token: 'final_abc', cohort: '' },
     })
-    expect(screen.getByTestId('status').textContent).toBe('error')
-    expect(screen.getByTestId('error').textContent).toContain('Upstream error')
-  })
-
-  it('sendOtp: RC 挑战错误时设置引导用户切换 Token 登录的提示', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: false,
-      status: 429,
-      json: async () => ({ error: 'rc', message: 'rc' }),
-    }))
-
-    const store = createTestStore()
-    render(
-      <Provider store={store}>
-        <AuthTestHarness username="testuser" action="sendOtp" />
-      </Provider>
-    )
-
-    await waitFor(() => {
-      expect(screen.getByTestId('result').textContent).toBe('false')
-    })
-    expect(screen.getByTestId('error').textContent).toContain('security check')
-  })
-
-  it('verifyOtp: 成功验证 OTP 时创建账号、写入 store、返回 true', async () => {
-    vi.stubGlobal('fetch', vi.fn()
-      // 第一阶段：验证 OTP → 返回临时 token
-      .mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => ({ access_token: 'final_abc', username: 'otpuser', email: 'otpuser@duck.com' }),
-      })
-    )
 
     const store = createTestStore()
     render(
@@ -172,17 +126,16 @@ describe('useAuth hook', () => {
     expect(store.get(activeAccountIdAtom)).toBe(accounts[0].id)
   })
 
-  it('verifyOtp: API 失败时返回 false 并设置错误', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: false,
-      status: 401,
-      json: async () => ({ message: 'Invalid or expired pass-phrase' }),
-    }))
+  it('verifyOtp: 失败时不写入 store', async () => {
+    vi.mocked(coreVerifyOtp).mockResolvedValue({
+      success: false,
+      error: 'Invalid or expired pass-phrase',
+    })
 
     const store = createTestStore()
     render(
       <Provider store={store}>
-        <AuthTestHarness username="otpuser" otp="bad otp" action="verifyOtp" />
+        <AuthTestHarness username="otpuser" otp="bad" action="verifyOtp" />
       </Provider>
     )
 
@@ -190,42 +143,14 @@ describe('useAuth hook', () => {
       expect(screen.getByTestId('result').textContent).toBe('false')
     })
     expect(screen.getByTestId('status').textContent).toBe('error')
-    // store 不应有账号
     expect(store.get(accountsAtom)).toHaveLength(0)
   })
 
-  it('verifyOtp: 返回的用户名已存在时去重拒绝', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ access_token: 'tok', username: 'existing', email: 'existing@duck.com' }),
-    }))
-
-    const store = createTestStore()
-    store.set(accountsAtom, [
-      { id: 'existing-id', username: 'existing', email: 'existing@duck.com', access_token: 'tok' },
-    ])
-
-    render(
-      <Provider store={store}>
-        <AuthTestHarness username="existing" otp="any" action="verifyOtp" />
-      </Provider>
-    )
-
-    await waitFor(() => {
-      expect(screen.getByTestId('result').textContent).toBe('false')
+  it('loginWithToken: 成功时写入 store 并返回 true', async () => {
+    vi.mocked(coreLoginWithToken).mockResolvedValue({
+      success: true,
+      account: { username: 'tokenuser', email: 'tokenuser@duck.com', access_token: 'valid_token', nextAlias: 'my-alias' },
     })
-    expect(screen.getByTestId('error').textContent).toContain('already in your list')
-    // store 不应新增
-    expect(store.get(accountsAtom)).toHaveLength(1)
-  })
-
-  it('loginWithToken: 成功时创建账号、写入 store、返回 true', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ address: 'my-private-alias' }),
-    }))
 
     const store = createTestStore()
     render(
@@ -243,27 +168,68 @@ describe('useAuth hook', () => {
     expect(accounts).toHaveLength(1)
     expect(accounts[0].username).toBe('tokenuser')
     expect(accounts[0].access_token).toBe('valid_token')
-    expect(accounts[0].nextAlias).toBe('my-private-alias')
+    expect(accounts[0].nextAlias).toBe('my-alias')
   })
 
-  it('loginWithToken: 重复账号时提前返回 false 且不调用 fetch', async () => {
-    const fetchMock = vi.fn()
-    vi.stubGlobal('fetch', fetchMock)
+  it('loginWithToken: 失败时不写入 store', async () => {
+    vi.mocked(coreLoginWithToken).mockResolvedValue({
+      success: false,
+      error: 'The Access Token is invalid or expired',
+    })
 
     const store = createTestStore()
-    store.set(accountsAtom, [
-      { id: 'existing-id', username: 'tokenuser', email: 'tokenuser@duck.com', access_token: 'tok' },
-    ])
-
     render(
       <Provider store={store}>
-        <AuthTestHarness username="tokenuser" token="any" action="loginWithToken" />
+        <AuthTestHarness username="tokenuser" token="bad" action="loginWithToken" />
       </Provider>
     )
 
     await waitFor(() => {
       expect(screen.getByTestId('result').textContent).toBe('false')
     })
-    expect(fetchMock).not.toHaveBeenCalled()
+    expect(screen.getByTestId('status').textContent).toBe('error')
+    expect(store.get(accountsAtom)).toHaveLength(0)
+  })
+
+  it('clearError 重置状态', async () => {
+    // 先触发一个失败
+    vi.mocked(coreSendOtp).mockResolvedValue({
+      success: false,
+      error: 'Some error',
+    })
+
+    function ClearTest() {
+      const { status, error, sendOtp, clearError } = useAuth()
+      const [cleared, setCleared] = useState(false)
+
+      useEffect(() => {
+        async function run() {
+          await sendOtp('testuser')
+          clearError()
+          setCleared(true)
+        }
+        run()
+      }, [sendOtp, clearError])
+
+      return (
+        <div>
+          <span data-testid="status">{status}</span>
+          <span data-testid="error">{error || ''}</span>
+          <span data-testid="cleared">{cleared ? 'yes' : 'no'}</span>
+        </div>
+      )
+    }
+
+    const store = createTestStore()
+    render(
+      <Provider store={store}>
+        <ClearTest />
+      </Provider>
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId('status').textContent).toBe('idle')
+    })
+    expect(screen.getByTestId('error').textContent).toBe('')
   })
 })
