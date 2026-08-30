@@ -83,7 +83,13 @@ pnpm dev
 
 ## 已知限制
 
-OTP 邮箱登录（`POST /api/auth/loginlink`）在请求来自服务器 IP 时会触发 DuckDuckGo 的 reCAPTCHA 验证（`"error": "rc"`）。Access Token 登录可以稳定绕过这一问题。路由处理器会把该错误转成清晰的提示，引导用户改用 Token 登录。
+### OTP 登录在服务器 IP 下被阻断
+
+当请求来自服务器 IP 时，OTP 邮箱登录（`POST /api/auth/loginlink`）会触发 DuckDuckGo 的 reCAPTCHA 验证（`"error": "rc"`）。Access Token 登录可以稳定绕过这一问题。路由处理器会把该错误转成清晰的提示，引导用户改用 Token 登录。
+
+### 生成别名在服务器 IP 下被阻断
+
+当请求来自服务器 IP（例如运行在数据中心的 Vercel Edge Function）时，生成私密 Duck 地址（`POST /api/email/addresses`）会被拒绝并返回 `403`。上游返回的是空的 `text/plain` 响应体，因此面板会提示 `Failed to parse response`。Token 本身是有效的——同样的请求从住宅 IP 发起就能成功。这是 DuckDuckGo 服务端的限流/风控，并非面板的 bug，无法通过代码修复。如果托管实例需要生成别名，请将面板部署到从住宅 IP 出网的环境（家庭服务器、NAS、家庭网络上的 Docker 等）。
 
 ## License
 

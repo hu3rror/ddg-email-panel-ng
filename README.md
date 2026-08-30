@@ -81,9 +81,15 @@ Key terms:
 - **Access Token** — An API token from DuckDuckGo for programmatic alias generation.
 - **OTP** — A time-limited passphrase sent to your Duck Address for authentication.
 
-## Known limitation
+## Known limitations
+
+### OTP login blocked on server IPs
 
 OTP email login (`POST /api/auth/loginlink`) hits a DuckDuckGo reCAPTCHA challenge (`"error": "rc"`) when the request comes from a server IP. Access Token login works reliably instead. The route handler surfaces this as a clear error message pointing users to the token login path.
+
+### Alias generation blocked on server IPs
+
+Generating a Private Duck Address (`POST /api/email/addresses`) is rejected with `403` when the request comes from a server IP (e.g. Vercel's edge functions, which run in a datacenter). The upstream returns an empty `text/plain` body, so the panel reports `Failed to parse response`. The token itself is valid — the same request succeeds from a residential IP. This is DuckDuckGo-side rate limiting/blocking, not a bug in the panel, so it can't be fixed from the code. Deploy the panel somewhere that egresses from a residential IP (home server, NAS, Docker on a home network) if you need alias generation from a hosted instance.
 
 ## License
 
