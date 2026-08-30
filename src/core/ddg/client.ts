@@ -53,10 +53,15 @@ async function fetchJson<T>(
 ): Promise<DdgResult<T>> {
   try {
     const res = await http(url, init)
+    const rawText = await res.text()
     let body: unknown
     try {
-      body = await res.json()
+      body = JSON.parse(rawText)
     } catch {
+      // [DEBUG-ddg-parse] 临时诊断：上游响应非 JSON 时记录详情，确诊后删除
+      console.error(
+        `[DEBUG-ddg-parse] url=${url} status=${res.status} contentType=${res.headers.get('content-type')} body=${rawText.slice(0, 500)}`
+      )
       return { ok: false, error: { type: 'parse_error', message: 'Failed to parse response' } }
     }
     if (!res.ok) {

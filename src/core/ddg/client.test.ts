@@ -10,6 +10,7 @@ function mockFetchOnce(data: unknown, status = 200, ok?: boolean) {
     ok: ok ?? (status >= 200 && status < 300),
     status,
     json: async () => data,
+    text: async () => (typeof data === 'string' ? data : JSON.stringify(data)),
   })
 }
 
@@ -134,6 +135,7 @@ describe('loginWithOtpTwoStage', () => {
         ok: true,
         status: 200,
         json: async () => ({ token: 'temp_token_123' }),
+        text: async () => JSON.stringify({ token: 'temp_token_123' }),
       })
       // 第二阶段：dashboard → 用户信息
       .mockResolvedValueOnce({
@@ -142,6 +144,10 @@ describe('loginWithOtpTwoStage', () => {
         json: async () => ({
           user: { access_token: 'final_token', username: 'otpuser', cohort: '2025' },
         }),
+        text: async () =>
+          JSON.stringify({
+            user: { access_token: 'final_token', username: 'otpuser', cohort: '2025' },
+          }),
       })
     vi.stubGlobal('fetch', fetchMock)
 
@@ -160,6 +166,7 @@ describe('loginWithOtpTwoStage', () => {
       ok: true,
       status: 200,
       json: async () => ({ token: 'tok' }),
+      text: async () => JSON.stringify({ token: 'tok' }),
     })
     vi.stubGlobal('fetch', fetchMock)
 
@@ -175,6 +182,7 @@ describe('loginWithOtpTwoStage', () => {
         ok: false,
         status: 401,
         json: async () => ({ message: 'Unauthorized' }),
+        text: async () => JSON.stringify({ message: 'Unauthorized' }),
       })
     )
 
@@ -194,11 +202,13 @@ describe('loginWithOtpTwoStage', () => {
           ok: true,
           status: 200,
           json: async () => ({ token: 'temp_token' }),
+          text: async () => JSON.stringify({ token: 'temp_token' }),
         })
         .mockResolvedValueOnce({
           ok: false,
           status: 500,
           json: async () => ({ message: 'Dashboard unavailable' }),
+          text: async () => JSON.stringify({ message: 'Dashboard unavailable' }),
         })
     )
 
@@ -216,6 +226,7 @@ describe('loginWithOtpTwoStage', () => {
         ok: true,
         status: 200,
         json: async () => ({ no_token_here: true }),
+        text: async () => JSON.stringify({ no_token_here: true }),
       })
     )
 
@@ -235,6 +246,7 @@ describe('loginWithOtpTwoStage', () => {
           ok: true,
           status: 200,
           json: async () => ({ token: 'tok' }),
+          text: async () => JSON.stringify({ token: 'tok' }),
         })
         .mockResolvedValueOnce({
           ok: true,
@@ -242,6 +254,10 @@ describe('loginWithOtpTwoStage', () => {
           json: async () => ({
             user: { access_token: 'final', username: 'duckuser', email: 'real@gmail.com' },
           }),
+          text: async () =>
+            JSON.stringify({
+              user: { access_token: 'final', username: 'duckuser', email: 'real@gmail.com' },
+            }),
         })
     )
 
@@ -267,6 +283,7 @@ describe('generateAddresses', () => {
         ok: true,
         status: 200,
         json: async () => ({ address: 'new_alias_123' }),
+        text: async () => JSON.stringify({ address: 'new_alias_123' }),
       })
     )
 
@@ -284,6 +301,7 @@ describe('generateAddresses', () => {
         ok: false,
         status: 401,
         json: async () => ({ message: 'Unauthorized' }),
+        text: async () => JSON.stringify({ message: 'Unauthorized' }),
       })
     )
 
