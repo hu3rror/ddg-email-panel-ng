@@ -53,6 +53,5 @@ Thumbs.db
 !.vscode/launch.json
 !.vscode/extensions.json
 
-.pi-subagents/
-*.md
-!README*.md
+.vercel
+.env*

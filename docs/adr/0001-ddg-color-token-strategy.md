@@ -1,0 +1,5 @@
+# DDG color token strategy: mixed CSS variables + `@theme` brand colors
+
+We restyled the UI to match the DuckDuckGo Email Protection design system. We use _semantic_ CSS variables (`--bg-base`, `--text-primary`, etc.) that flip value under the `.dark` class for light/dark theming, referenced in JSX via Tailwind's arbitrary-value syntax (`bg-[var(--bg-surface)]`). Brand colors that do not change per theme (orange, green, blue) are registered once as Tailwind v4 `@theme` classes (`bg-ddg-orange`). Radii (`--radius-card`/`--radius-btn`), shadows, and the font stack are also declared in `@theme`.
+
+This is a deliberate split rather than the "obvious" all-`@theme` or all-variable approach: semantic tokens need to change with the theme, so they must be runtime CSS variables; brand colors are static and benefit from Tailwind's utility-class ergonomics and type safety. The theme toggle persists to `localStorage` (`ddg-theme`), with `prefers-color-scheme` as the fallback, overriding the previous hardcoded dark-only layout.
