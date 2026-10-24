@@ -2,6 +2,8 @@
 
 开源的 DuckDuckGo Email Protection 非官方面板，原生部署在 Vercel 上。
 
+> **⚠️ 已归档 — 停止维护（2026-10）。** 从数据中心出口生成别名会被 DuckDuckGo 在传输层拦截；已原型验证可行的绕过方案（在服务端函数内嵌真实 Chromium）但未产品化。完整调查结论与实现指南见[已知限制](#已知限制)。
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fhu3rror%2Fddg-email-panel-ng)
 
 [English](./README.md)
@@ -89,7 +91,30 @@ pnpm dev
 
 ### 生成别名在服务器 IP 下被阻断
 
-当请求来自服务器 IP（例如运行在数据中心的 Vercel Edge Function）时，生成私密 Duck 地址（`POST /api/email/addresses`）会被拒绝并返回 `403`。上游返回的是空的 `text/plain` 响应体，因此面板会提示 `Failed to parse response`。Token 本身是有效的——同样的请求从住宅 IP 发起就能成功。这是 DuckDuckGo 服务端的限流/风控，并非面板的 bug，无法通过代码修复。如果托管实例需要生成别名，请将面板部署到从住宅 IP 出网的环境（家庭服务器、NAS、家庭网络上的 Docker 等）。
+### 生成别名被 DuckDuckGo 拦截 —— 根因：传输层客户端指纹识别
+
+**一句话结论** —— `POST /api/email/addresses` 只放行真实浏览器网络栈。风控是客户端级的，不是 IP 级的：同一个代理 IP，浏览器能正常生成，`curl` 就被拦。任何请求头组合、任何 TLS 指纹伪装库都无法绕过。
+
+2026-10 实测（全程假 token；`401 {"error":"invalid_token"}` = 请求到达 DDG 认证层 = 通过机器人门禁）：
+
+| 出口 + 客户端 | 结果 |
+|---|---|
+| 住宅 IP + 浏览器 / 真实 Chromium | 201（真实生成地址） |
+| 任意测试出口 + `curl`（即使完整复刻浏览器请求头） | 401 |
+| 任意测试出口 + `curl_cffi`（全部 44 个伪装引擎：chrome 99–150、safari、firefox、tor） | 401 |
+| 任意测试出口 + 真实 Chromium 网络栈（无头） | 401 ✅ 通过门禁 |
+| Vercel Edge（生产）+ 服务端 `fetch` | 500 "Failed to parse response" |
+| Vercel Node（AWS）+ 服务端 `fetch` | 500 "Failed to parse response" |
+| Cloudflare Workers + 服务端 `fetch` | 401 ✅ 通过门禁 |
+| Vercel（AWS）+ `@sparticuz/chromium` 153 headless shell | 401 ✅ 通过门禁 |
+
+官方扩展的 `fetchAlias()` 只带 `Authorization: Bearer` 一个请求头 —— DDG 的判断依据是底层网络栈的 TLS/HTTP-2 指纹（扩展继承了浏览器的网络栈）。服务端 `fetch`（Node/undici）永远是"非浏览器"网络栈，必然被拒。
+
+**可行方案（已原型验证，本项目未产品化）：** 在 Vercel Node 函数内嵌真实 Chromium —— `@sparticuz/chromium@153.0.0`（约 70 MB）+ `puppeteer-core@25`，用 `page.evaluate` 发起请求。Vercel Hobby（2 GB，iad1）实测：冷启动函数内约 5.2 秒（解压 2.3 秒 + 启动 + 网络）；热调用跳过解压（`/tmp` 缓存命中，0 毫秒），但网络仍占大头（约 4–5 秒）。建议：页面加载时预热函数、缓存 `executablePath` Promise、覆盖 UA（headless shell 默认是 `HeadlessChrome`）、用 `headless: 'shell'`。
+
+原型阶段踩过的坑：(1) Vercel 函数打包与 pnpm 符号链接 `node_modules` 冲突（部署时报 `EEXIST`）——改用 npm 安装，或小心处理 `includeFiles` 中的符号链接；(2) `puppeteer-core` 25 是纯 ESM 包——路由必须写成 ESM（`.mjs`），`require()` 会直接崩溃；(3) 在 `vercel.json` 里用 `includeFiles: "node_modules/@sparticuz/chromium/bin/**"` 把压缩二进制打进函数。
+
+可用 `scripts/check-ddg-egress.sh`、`scripts/check-ddg-engines.sh`、`scripts/test-ddg-copy-as-curl.sh` 复现上述指纹测试（token 通过 `--token-file` 或环境变量传入，绝不出现在命令行）。
 
 ## License
 

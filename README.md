@@ -2,6 +2,8 @@
 
 Open source, unofficial panel for DuckDuckGo Email Protection. Deployed natively on Vercel.
 
+> **⚠️ Archived — no longer maintained (as of 2026-10).** Alias generation from datacenter egress is blocked by DuckDuckGo at the transport layer; a workaround (real Chromium inside the server function) was prototyped successfully but not productized. Full investigation and how-to in [Known limitations](#known-limitations).
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fhu3rror%2Fddg-email-panel-ng)
 
 [中文](./README_zh-CN.md)
@@ -87,9 +89,30 @@ Key terms:
 
 OTP email login (`POST /api/auth/loginlink`) hits a DuckDuckGo reCAPTCHA challenge (`"error": "rc"`) when the request comes from a server IP. Access Token login works reliably instead. The route handler surfaces this as a clear error message pointing users to the token login path.
 
-### Alias generation blocked on server IPs
+### Alias generation blocked by DuckDuckGo — root cause: transport-layer client fingerprinting
 
-Generating a Private Duck Address (`POST /api/email/addresses`) is rejected with `403` when the request comes from a server IP (e.g. Vercel's edge functions, which run in a datacenter). The upstream returns an empty `text/plain` body, so the panel reports `Failed to parse response`. The token itself is valid — the same request succeeds from a residential IP. This is DuckDuckGo-side rate limiting/blocking, not a bug in the panel, so it can't be fixed from the code. Deploy the panel somewhere that egresses from a residential IP (home server, NAS, Docker on a home network) if you need alias generation from a hosted instance.
+**TL;DR** — `POST /api/email/addresses` only succeeds from a real browser network stack. The block is client-side, not IP-side: the same proxy IP that generates addresses from a browser gets blocked from `curl`. No header set and no TLS-impersonation library fixes it.
+
+Verified in 2026-10, always with a fake token (`401 {"error":"invalid_token"}` = the request reached DDG's auth layer = the bot gate was passed):
+
+| Egress + client | Result |
+|---|---|
+| Residential IP + browser / real Chromium | 201 (generates an address) |
+| Any tested egress + `curl` (even with the full browser header set copied) | 401 |
+| Any tested egress + `curl_cffi`, all 44 impersonation profiles (chrome 99–150, safari, firefox, tor) | 401 |
+| Any tested egress + real Chromium network stack (headless) | 401 ✅ gate passed |
+| Vercel Edge (production) + server `fetch` | 500 "Failed to parse response" |
+| Vercel Node (AWS) + server `fetch` | 500 "Failed to parse response" |
+| Cloudflare Workers + server `fetch` | 401 ✅ gate passed |
+| Vercel (AWS) + `@sparticuz/chromium` 153 headless shell | 401 ✅ gate passed |
+
+The official extension's `fetchAlias()` sends only an `Authorization: Bearer` header — DDG's verdict is based on the TLS/HTTP-2 fingerprint of the underlying network stack, which the extension inherits from the browser. Server-side `fetch` (Node/undici) is always a non-browser stack and gets rejected.
+
+**Working path (prototyped, not productized here):** run a real Chromium inside the Vercel Node function — `@sparticuz/chromium@153.0.0` (~70 MB) + `puppeteer-core@25` — and issue the request via `page.evaluate`. Measured on Vercel Hobby (2 GB, iad1): cold call ≈ 5.2 s inside the function (2.3 s decompress + launch + network); hot calls skip decompression (`/tmp` cached, 0 ms) but the network still dominates (~4–5 s). Recommended: warm the function on page load, cache the `executablePath` promise, override the UA (headless shell's default is `HeadlessChrome`), use `headless: 'shell'`.
+
+Gotchas hit while prototyping: (1) Vercel function bundling conflicts with pnpm's symlinked `node_modules` (`EEXIST` on deploy) — install with npm instead, or handle symlinks in `includeFiles`; (2) `puppeteer-core` 25 is pure ESM — the route must be ESM (`.mjs`); `require()` crashes; (3) ship the compressed binary via `includeFiles: "node_modules/@sparticuz/chromium/bin/**"` in `vercel.json`.
+
+Reproduce the fingerprinting tests with `scripts/check-ddg-egress.sh`, `scripts/check-ddg-engines.sh`, `scripts/test-ddg-copy-as-curl.sh` (token via `--token-file` or env, never on the command line).
 
 ## License
 
